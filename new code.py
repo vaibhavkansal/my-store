@@ -79,6 +79,7 @@ def addbundle1(event):
     bunlis = []
     for i in w:
         bunlis.append(i[0])
+    bunlis=list(set(bunlis))
 
     def check(*args):
         d.append(e1.get())
@@ -216,8 +217,8 @@ def addbundle1(event):
         for i in bunlis:
             if a in i:
                 checklist.append(i)
-        checklist=list(set(checklist))
         e1["values"] = checklist
+
 
     e1.bind("<KeyRelease>", keydown)
 
@@ -270,7 +271,7 @@ def showstock1(events):
         # respective columns
         treev.column("1", width=250, anchor='c')
         treev.column("2", width=300, anchor='c')
-        treev.column("3", width=150, anchor='c')
+        treev.column("3", width=180, anchor='c')
         treev.column("4", width=110, anchor='c')
         treev.column("5", width=110, anchor='c')
         treev.column("6", width=100, anchor='c')
@@ -333,8 +334,8 @@ def showstock1(events):
         # respective columns
         treev.column("1", width=250, anchor='c')
         treev.column("2", width=300, anchor='c')
-        treev.column("3", width=150, anchor='c')
-        treev.column("4", width=80, anchor='c')
+        treev.column("3", width=180, anchor='c')
+        treev.column("4", width=100, anchor='c')
         treev.column("5", width=110, anchor='c')
         treev.column("6", width=100, anchor='c')
         treev.column("7", width=60, anchor='c')
@@ -582,7 +583,18 @@ def showstock1(events):
                 d12.append(e9.get())
                 d12.append(e10.get())
                 d12.append(e11.get())
-                d12.append(e12.get())
+                as1 = e12.get()
+                if as1.count('-') == 2 and as1.index('-') == 2 and as1.index('-', 3) == 5 and len(as1) == 10:
+                    date1 = as1.split('-')
+                    date1.reverse()
+                    date2 = "-".join(date1)
+                    d12.append(date2)
+                elif as1.count('-') == 2 and as1.index('-') == 4 and as1.index('-', 5) == 7 and len(as1) == 10:
+                    d12.append(as1)
+                else:
+                    tsmg.showinfo("FORMAT", "Wrong date format")
+                    return
+
                 d12.append(e13.get())
 
                 connection = sqlite3.connect("mytables4.db")
@@ -679,6 +691,9 @@ def showstock(events):
     f3.destroy()
     f4.destroy()
     showstock1(events)
+
+
+
 
 def showstocksbeforesaving1(d):
     global f3
@@ -1031,8 +1046,8 @@ def splitbundle1(event):
             if (d[12] == "SOLD"):
                 tsmg.showinfo("Warning", "ALREADY SOLD")
             else:
-                f4 = Frame(root, background="pink", width=100, height=15, borderwidth=6, relief=SUNKEN)
-                f4.grid(row=1, column=2, sticky="nsew")
+                e.grid_remove()
+                l.grid_remove()
                 strdat = str(d)
                 Label(f4, text=strdat).grid()
 
@@ -1097,6 +1112,7 @@ def splitbundle1(event):
                 Button(f3, text="SLPIT", command=checkewd).grid(row=4, column=2, columnspan=2, padx=25)
 
         pass
+
 
     e.bind("<Return>", check)
     e.bind("<KP_Enter>", check)
@@ -1223,18 +1239,19 @@ def searchbundleno1(event):
                 d1.append(e8.get())
                 d1.append(e9.get())
                 d1.append(e10.get())
-                as1 = e11.get()
+                d1.append(e11.get())
+
+                as1 = e12.get()
                 if as1.count('-') == 2 and as1.index('-') == 2 and as1.index('-', 3) == 5 and len(as1) == 10:
                     date1 = as1.split('-')
                     date1.reverse()
                     date2 = "-".join(date1)
-                    d.append(date2)
+                    d1.append(date2)
                 elif as1.count('-') == 2 and as1.index('-') == 4 and as1.index('-', 5) == 7 and len(as1) == 10:
-                    d.append(as1)
+                    d1.append(as1)
                 else:
                     tsmg.showinfo("FORMAT", "Wrong date format")
-                    d.append('')
-                d1.append(e12.get())
+                    return
                 d1.append(e13.get())
                 connection = sqlite3.connect("mytables4.db")
                 crsr = connection.cursor()
@@ -1392,58 +1409,120 @@ def searchpl1(event):
                 d.append(list(i))
             connection.close()
 
-            f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-            f3.grid(row=0, column=2, sticky="nsew")
+            def desa1(d):
+                global f3
+                f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                f3.grid(row=0, column=2, sticky="nsew")
 
-            treev = ttk.Treeview(f3, selectmode='browse', height=20)
-            treev.pack(fill=BOTH)
-            scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
-            scrollbar.pack(side=BOTTOM, fill=X)
-            treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
-            treev.configure(xscrollcommand=scrollbar.set)
-            # Defining heading
-            treev['show'] = 'headings'
+                treev = ttk.Treeview(f3, selectmode='browse', height=20)
+                treev.pack(fill=BOTH)
+                scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
+                scrollbar.pack(side=BOTTOM, fill=X)
+                treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
+                treev.configure(xscrollcommand=scrollbar.set)
+                # Defining heading
+                treev['show'] = 'headings'
 
-            # Assigning the width and anchor to  the
-            # respective columns
-            treev.column("1", width=250, anchor='c')
-            treev.column("2", width=300, anchor='c')
-            treev.column("3", width=150, anchor='c')
-            treev.column("4", width=80, anchor='c')
-            treev.column("5", width=100, anchor='c')
-            treev.column("6", width=100, anchor='c')
-            treev.column("7", width=60, anchor='c')
-            treev.column("8", width=60, anchor='c')
-            treev.column("9", width=60, anchor='c')
-            treev.column("10", width=60, anchor='c')
-            treev.column("11", width=80, anchor='c')
-            treev.column("12", width=100, anchor='c')
-            treev.column("13", width=100, anchor='c')
+                # Assigning the width and anchor to  the
+                # respective columns
+                treev.column("1", width=250, anchor='c')
+                treev.column("2", width=300, anchor='c')
+                treev.column("3", width=150, anchor='c')
+                treev.column("4", width=80, anchor='c')
+                treev.column("5", width=100, anchor='c')
+                treev.column("6", width=100, anchor='c')
+                treev.column("7", width=60, anchor='c')
+                treev.column("8", width=60, anchor='c')
+                treev.column("9", width=60, anchor='c')
+                treev.column("10", width=60, anchor='c')
+                treev.column("11", width=80, anchor='c')
+                treev.column("12", width=100, anchor='c')
+                treev.column("13", width=100, anchor='c')
 
-            # Assigning the heading names to the
-            # respective columns
-            treev.heading("1", text="TYPE")
-            treev.heading("2", text="DENSIZE")
-            treev.heading("3", text="THK REMARK")
-            treev.heading("4", text="BUNDLENO")
-            treev.heading("5", text="COVER")
-            treev.heading("6", text="STM")
-            treev.heading("7", text="R2")
-            treev.heading("8", text="PCS")
-            treev.heading("9", text="MM")
-            treev.heading("10", text="KGS")
-            treev.heading("11", text="PACKINGLIST")
-            treev.heading("12", text="DATE")
-            treev.heading("13", text="STATUS")
-            # Inserting the items and their features to the
-            # columns built
-            for row in d:
-                s = tuple(row)
-                treev.insert("", 'end', values=s, tags=(s[12],))
-            treev.tag_configure('SOLD', background='light green')
-            treev.tag_configure('SPLIT', background='light blue')
+                # Assigning the heading names to the
+                # respective columns
+                treev.heading("1", text="TYPE")
+                treev.heading("2", text="DENSIZE")
+                treev.heading("3", text="THK REMARK")
+                treev.heading("4", text="BUNDLENO")
+                treev.heading("5", text="COVER")
+                treev.heading("6", text="STM")
+                treev.heading("7", text="R2")
+                treev.heading("8", text="PCS")
+                treev.heading("9", text="MM")
+                treev.heading("10", text="KGS")
+                treev.heading("11", text="PACKINGLIST")
+                treev.heading("12", text="DATE")
+                treev.heading("13", text="STATUS")
+                # Inserting the items and their features to the
+                # columns built
+                for row in d:
+                    s = tuple(row)
+                    treev.insert("", 'end', values=s, tags=(s[12],))
+                treev.tag_configure('SOLD', background='light green')
+                treev.tag_configure('SPLIT', background='light blue')
+            def desa(d):
+                f3.destroy()
+                desa1(d)
+            desa(d)
 
             Button(f4, text=" FOUND   ").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
+
+
+    connection = sqlite3.connect("mytables4.db")
+    crsr = connection.cursor()
+    crsr.execute(f"SELECT * FROM stockfinal634 WHERE DATE >= '{from_date}' AND DATE <= '{to_date}' ")
+    w = crsr.fetchall()
+    connection.close()
+    treev = ttk.Treeview(f3, selectmode='browse', height=19)
+    treev.pack(fill=X)
+
+    scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
+    scrollbar.pack(side=BOTTOM, fill=X)
+    treev.configure(xscrollcommand=scrollbar.set)
+    treev["columns"] = ("1", "2", "3")
+    # Defining heading
+    treev['show'] = 'headings'
+
+        # Assigning the width and anchor to  the
+        # respective columns
+    treev.column("1", anchor='c')
+    treev.column("2", anchor='c')
+    treev.column("3", anchor='c')
+        # Assigning the heading names to the
+    # respective columns
+    treev.heading("1", text="DATE")
+    treev.heading("2", text="PACKING LIST")
+    treev.heading("3", text="BUNDLES")
+    dict={}
+    for s in w:
+        if s[10] not in dict:
+            dict[s[10]]=[s[11],s[10],1]
+        else:
+            dict[s[10]][2]=dict[s[10]][2]+1
+
+    tes = dict.items()
+    tes = list(tes)
+    print(tes)
+    s=[]
+    for i in tes:
+        s.append(i[1])
+    for u in s:
+        treev.insert("", 'end', values=u)
+    def clickedrow(event):
+        item = treev.identify_row(event.y)
+        if item:
+            a = treev.item(item, 'values')
+            a = list(a)
+            e.insert(0, a[1])
+
+
+
+
+        pass
+    treev.bind("<Double-Button-1>", clickedrow)
+
+
 
     l = Label(f4, text=" PLNO  ", width=10)
     l.grid(row=0, column=0, padx=5, pady=5)
@@ -1451,6 +1530,7 @@ def searchpl1(event):
     e.grid(row=0, column=1)
     Button(f4, text="SEARCH", command=check).grid(row=2, column=0, columnspan=2, padx=25)
     e.focus()
+
     pass
 def searchpl(event):
     f3.destroy()
@@ -1523,60 +1603,67 @@ def searchbundlename1(event):
             connection.close()
             # here we get list under alist which is under a list
             print(d)
-            f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-            f3.grid(row=0, column=2, sticky="nsew")
+            def chet1(d):
+                global f3
+                f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                f3.grid(row=0, column=2, sticky="nsew")
 
-            treev = ttk.Treeview(f3, selectmode='browse', height=20)
-            treev.pack(fill=BOTH)
-            scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
-            scrollbar.pack(side=BOTTOM, fill=X)
-            treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
-            treev.configure(xscrollcommand=scrollbar.set)
-            # Defining heading
-            treev['show'] = 'headings'
+                treev = ttk.Treeview(f3, selectmode='browse', height=20)
+                treev.pack(fill=BOTH)
+                scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
+                scrollbar.pack(side=BOTTOM, fill=X)
+                treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
+                treev.configure(xscrollcommand=scrollbar.set)
+                # Defining heading
+                treev['show'] = 'headings'
 
-            # Assigning the width and anchor to  the
-            # respective columns
-            treev.column("1", width=250, anchor='c')
-            treev.column("2", width=300, anchor='c')
-            treev.column("3", width=150, anchor='c')
-            treev.column("4", width=80, anchor='c')
-            treev.column("5", width=100, anchor='c')
-            treev.column("6", width=100, anchor='c')
-            treev.column("7", width=60, anchor='c')
-            treev.column("8", width=60, anchor='c')
-            treev.column("9", width=60, anchor='c')
-            treev.column("10", width=60, anchor='c')
-            treev.column("11", width=80, anchor='c')
-            treev.column("12", width=100, anchor='c')
-            treev.column("13", width=100, anchor='c')
+                # Assigning the width and anchor to  the
+                # respective columns
+                treev.column("1", width=250, anchor='c')
+                treev.column("2", width=300, anchor='c')
+                treev.column("3", width=150, anchor='c')
+                treev.column("4", width=80, anchor='c')
+                treev.column("5", width=100, anchor='c')
+                treev.column("6", width=100, anchor='c')
+                treev.column("7", width=60, anchor='c')
+                treev.column("8", width=60, anchor='c')
+                treev.column("9", width=60, anchor='c')
+                treev.column("10", width=60, anchor='c')
+                treev.column("11", width=80, anchor='c')
+                treev.column("12", width=100, anchor='c')
+                treev.column("13", width=100, anchor='c')
 
-            # Assigning the heading names to the
-            # respective columns
-            treev.heading("1", text="TYPE")
-            treev.heading("2", text="DENSIZE")
-            treev.heading("3", text="THK REMARK")
-            treev.heading("4", text="BUNDLENO")
-            treev.heading("5", text="COVER")
-            treev.heading("6", text="STM")
-            treev.heading("7", text="R2")
-            treev.heading("8", text="PCS")
-            treev.heading("9", text="MM")
-            treev.heading("10", text="KGS")
-            treev.heading("11", text="PACKINGLIST")
-            treev.heading("12", text="DATE")
-            treev.heading("13", text="STATUS")
-            # Inserting the items and their features to the
-            # columns built
+                # Assigning the heading names to the
+                # respective columns
+                treev.heading("1", text="TYPE")
+                treev.heading("2", text="DENSIZE")
+                treev.heading("3", text="THK REMARK")
+                treev.heading("4", text="BUNDLENO")
+                treev.heading("5", text="COVER")
+                treev.heading("6", text="STM")
+                treev.heading("7", text="R2")
+                treev.heading("8", text="PCS")
+                treev.heading("9", text="MM")
+                treev.heading("10", text="KGS")
+                treev.heading("11", text="PACKINGLIST")
+                treev.heading("12", text="DATE")
+                treev.heading("13", text="STATUS")
+                # Inserting the items and their features to the
+                # columns built
 
-            for rows1 in d:
-                for row in rows1:
-                    s = tuple(row)
-                    treev.insert("", 'end', values=s, tags=(s[12],))
-            treev.tag_configure('SOLD', background='light green')
-            treev.tag_configure('SPLIT', background='light blue')
+                for rows1 in d:
+                    for row in rows1:
+                        s = tuple(row)
+                        treev.insert("", 'end', values=s, tags=(s[12],))
+                treev.tag_configure('SOLD', background='light green')
+                treev.tag_configure('SPLIT', background='light blue')
+            def chet(d):
+                f3.destroy()
+                chet1(d)
+            chet(d)
 
             pass
+
 
         listbox.bind("<Return>", searw1)
         listbox.bind("<KP_Enter>", searw1)
@@ -1643,57 +1730,63 @@ def deletepacking1(event):
             for i in w:
                 d.append(list(i))
             connection.close()
+            def resd1(d):
+                global f3
+                f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                f3.grid(row=0, column=2, sticky="nsew")
 
-            f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-            f3.grid(row=0, column=2, sticky="nsew")
+                treev = ttk.Treeview(f3, selectmode='browse', height=20)
+                treev.pack(fill=BOTH)
+                scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
+                scrollbar.pack(side=BOTTOM, fill=X)
+                treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
+                treev.configure(xscrollcommand=scrollbar.set)
+                # Defining heading
+                treev['show'] = 'headings'
 
-            treev = ttk.Treeview(f3, selectmode='browse', height=20)
-            treev.pack(fill=BOTH)
-            scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev.xview)
-            scrollbar.pack(side=BOTTOM, fill=X)
-            treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13")
-            treev.configure(xscrollcommand=scrollbar.set)
-            # Defining heading
-            treev['show'] = 'headings'
+                # Assigning the width and anchor to  the
+                # respective columns
+                treev.column("1", width=250, anchor='c')
+                treev.column("2", width=300, anchor='c')
+                treev.column("3", width=150, anchor='c')
+                treev.column("4", width=80, anchor='c')
+                treev.column("5", width=100, anchor='c')
+                treev.column("6", width=100, anchor='c')
+                treev.column("7", width=60, anchor='c')
+                treev.column("8", width=60, anchor='c')
+                treev.column("9", width=60, anchor='c')
+                treev.column("10", width=60, anchor='c')
+                treev.column("11", width=80, anchor='c')
+                treev.column("12", width=100, anchor='c')
+                treev.column("13", width=100, anchor='c')
 
-            # Assigning the width and anchor to  the
-            # respective columns
-            treev.column("1", width=250, anchor='c')
-            treev.column("2", width=300, anchor='c')
-            treev.column("3", width=150, anchor='c')
-            treev.column("4", width=80, anchor='c')
-            treev.column("5", width=100, anchor='c')
-            treev.column("6", width=100, anchor='c')
-            treev.column("7", width=60, anchor='c')
-            treev.column("8", width=60, anchor='c')
-            treev.column("9", width=60, anchor='c')
-            treev.column("10", width=60, anchor='c')
-            treev.column("11", width=80, anchor='c')
-            treev.column("12", width=100, anchor='c')
-            treev.column("13", width=100, anchor='c')
+                # Assigning the heading names to the
+                # respective columns
+                treev.heading("1", text="TYPE")
+                treev.heading("2", text="DENSIZE")
+                treev.heading("3", text="THK REMARK")
+                treev.heading("4", text="BUNDLENO")
+                treev.heading("5", text="COVER")
+                treev.heading("6", text="STM")
+                treev.heading("7", text="R2")
+                treev.heading("8", text="PCS")
+                treev.heading("9", text="MM")
+                treev.heading("10", text="KGS")
+                treev.heading("11", text="PACKINGLIST")
+                treev.heading("12", text="DATE")
+                treev.heading("13", text="STATUS")
+                # Inserting the items and their features to the
+                # columns built
+                for row in d:
+                    s = tuple(row)
+                    treev.insert("", 'end', values=s, tags=(s[12],))
+                treev.tag_configure('SOLD', background='light green')
+                treev.tag_configure('SPLIT', background='light blue')
+            def resd(d):
+                f3.destroy()
+                resd1(d)
+            resd(d)
 
-            # Assigning the heading names to the
-            # respective columns
-            treev.heading("1", text="TYPE")
-            treev.heading("2", text="DENSIZE")
-            treev.heading("3", text="THK REMARK")
-            treev.heading("4", text="BUNDLENO")
-            treev.heading("5", text="COVER")
-            treev.heading("6", text="STM")
-            treev.heading("7", text="R2")
-            treev.heading("8", text="PCS")
-            treev.heading("9", text="MM")
-            treev.heading("10", text="KGS")
-            treev.heading("11", text="PACKINGLIST")
-            treev.heading("12", text="DATE")
-            treev.heading("13", text="STATUS")
-            # Inserting the items and their features to the
-            # columns built
-            for row in d:
-                s = tuple(row)
-                treev.insert("", 'end', values=s, tags=(s[12],))
-            treev.tag_configure('SOLD', background='light green')
-            treev.tag_configure('SPLIT', background='light blue')
 
             Button(f4, text="   DELETE    ", command=delete).grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
 
@@ -2029,97 +2122,103 @@ def updatecustomer1(event):
         if item:
             a = treev.item(item, 'values')
             a = list(a)
-            f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
-            f4.grid(row=1, column=2, sticky="nsew")
-            l1 = Label(f4, text="NAME", width=8)
-            l1.grid(row=0, column=0, padx=5, pady=5)
-            e1 = Entry(f4)
-            e1.grid(row=0, column=1)
-            l2 = Label(f4, text="ADD_LINE_1", padx=5, width=8)
-            l2.grid(row=1, column=0, padx=5, pady=5)
-            e2 = Entry(f4)
-            e2.grid(row=1, column=1)
-            l3 = Label(f4, text="ADD_LINE_2", padx=5, width=8)
-            l3.grid(row=2, column=0, padx=5, pady=5)
-            e3 = Entry(f4)
-            e3.grid(row=2, column=1)
-            l4 = Label(f4, text="CITY", padx=5, width=8)
-            l4.grid(row=0, column=2, padx=5, pady=5)
-            e4 = Entry(f4)
-            e4.grid(row=0, column=3)
-            l5 = Label(f4, text="PINCODE", padx=5, width=8)
-            l5.grid(row=1, column=2, padx=5, pady=5)
-            e5 = Entry(f4)
-            e5.grid(row=1, column=3)
-            l6 = Label(f4, text="MOBILE NO", padx=5, width=8)
-            l6.grid(row=2, column=2, padx=5, pady=5)
-            e6 = Entry(f4)
-            e6.grid(row=2, column=3)
-            l7 = Label(f4, text="LIMIT_", padx=5, width=8)
-            l7.grid(row=0, column=4, padx=20, pady=5)
-            e7 = Entry(f4)
-            e7.grid(row=0, column=5)
-            l8 = Label(f4, text="TOTAL", padx=5, width=8)
-            l8.grid(row=1, column=4, padx=5, pady=5)
-            e8 = Entry(f4)
-            e8.grid(row=1, column=5)
-            e1.insert(0, a[0])
-            e2.insert(0, a[1])
-            e3.insert(0, a[2])
-            e4.insert(0, a[3])
-            e5.insert(0, a[4])
-            e6.insert(0, a[5])
-            e7.insert(0, a[6])
-            e8.insert(0, a[7])
+            def sgf1(a):
+                global f4
+                f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
+                f4.grid(row=1, column=2, sticky="nsew")
+                l1 = Label(f4, text="NAME", width=8)
+                l1.grid(row=0, column=0, padx=5, pady=5)
+                e1 = Entry(f4)
+                e1.grid(row=0, column=1)
+                l2 = Label(f4, text="ADD_LINE_1", padx=5, width=8)
+                l2.grid(row=1, column=0, padx=5, pady=5)
+                e2 = Entry(f4)
+                e2.grid(row=1, column=1)
+                l3 = Label(f4, text="ADD_LINE_2", padx=5, width=8)
+                l3.grid(row=2, column=0, padx=5, pady=5)
+                e3 = Entry(f4)
+                e3.grid(row=2, column=1)
+                l4 = Label(f4, text="CITY", padx=5, width=8)
+                l4.grid(row=0, column=2, padx=5, pady=5)
+                e4 = Entry(f4)
+                e4.grid(row=0, column=3)
+                l5 = Label(f4, text="PINCODE", padx=5, width=8)
+                l5.grid(row=1, column=2, padx=5, pady=5)
+                e5 = Entry(f4)
+                e5.grid(row=1, column=3)
+                l6 = Label(f4, text="MOBILE NO", padx=5, width=8)
+                l6.grid(row=2, column=2, padx=5, pady=5)
+                e6 = Entry(f4)
+                e6.grid(row=2, column=3)
+                l7 = Label(f4, text="LIMIT_", padx=5, width=8)
+                l7.grid(row=0, column=4, padx=20, pady=5)
+                e7 = Entry(f4)
+                e7.grid(row=0, column=5)
+                l8 = Label(f4, text="TOTAL", padx=5, width=8)
+                l8.grid(row=1, column=4, padx=5, pady=5)
+                e8 = Entry(f4)
+                e8.grid(row=1, column=5)
+                e1.insert(0, a[0])
+                e2.insert(0, a[1])
+                e3.insert(0, a[2])
+                e4.insert(0, a[3])
+                e5.insert(0, a[4])
+                e6.insert(0, a[5])
+                e7.insert(0, a[6])
+                e8.insert(0, a[7])
 
-            def update():
-                newdata = []
-                newdata.append(e1.get().upper())
-                newdata.append(e2.get().upper())
-                newdata.append(e3.get().upper())
-                newdata.append(e4.get().upper())
-                newdata.append(e5.get().upper())
-                newdata.append(e6.get().upper())
-                try:
-                    aerw1 = float(e7.get())
-                    newdata.append(aerw1)
-                except Exception as e:
-                    newdata.append('0')
-                try:
-                    aerw = float(e8.get())
-                    newdata.append(aerw)
-                except Exception as e:
-                    newdata.append('0')
+                def update():
+                    newdata = []
+                    newdata.append(e1.get().upper())
+                    newdata.append(e2.get().upper())
+                    newdata.append(e3.get().upper())
+                    newdata.append(e4.get().upper())
+                    newdata.append(e5.get().upper())
+                    newdata.append(e6.get().upper())
+                    try:
+                        aerw1 = float(e7.get())
+                        newdata.append(aerw1)
+                    except Exception as e:
+                        newdata.append('0')
+                    try:
+                        aerw = float(e8.get())
+                        newdata.append(aerw)
+                    except Exception as e:
+                        newdata.append('0')
 
-                d1 = tuple(newdata)
+                    d1 = tuple(newdata)
 
-                connection = sqlite3.connect("mytables4.db")
-                cursor = connection.cursor()
-                cursor.execute(f"DELETE FROM custom9 WHERE NAME ='{a[0]}';")
-                connection.commit()
-                row = d1
-                sa = f'''INSERT INTO custom9 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}')'''
-                try:
-                    cursor.execute(sa)
+                    connection = sqlite3.connect("mytables4.db")
+                    cursor = connection.cursor()
+                    cursor.execute(f"DELETE FROM custom9 WHERE NAME ='{a[0]}';")
                     connection.commit()
-                    tsmg.showinfo("Saved", "your entry has been updated")
-                    updatecustomer(event)
-                    # errorcanoccur
-
-                except Exception as e:
-                    row = a
-
+                    row = d1
                     sa = f'''INSERT INTO custom9 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}')'''
-                    cursor.execute(sa)
-                    connection.commit()
+                    try:
+                        cursor.execute(sa)
+                        connection.commit()
+                        tsmg.showinfo("Saved", "your entry has been updated")
+                        updatecustomer(event)
+                        # errorcanoccur
 
-                    print(e)
-                    tsmg.showinfo("Failed", "Customer already exist")
-                    updatecustomer(event)
+                    except Exception as e:
+                        row = a
 
-                d1 = tuple(newdata)
+                        sa = f'''INSERT INTO custom9 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}')'''
+                        cursor.execute(sa)
+                        connection.commit()
 
-            Button(f4, text="UPDATE CUSTOMER", command=update).grid(row=2, column=4, columnspan=2, padx=25)
+                        print(e)
+                        tsmg.showinfo("Failed", "Customer already exist")
+                        updatecustomer(event)
+
+                    d1 = tuple(newdata)
+
+                Button(f4, text="UPDATE CUSTOMER", command=update).grid(row=2, column=4, columnspan=2, padx=25)
+            def sgf(a):
+                f4.destroy()
+                sgf1(a)
+            sgf(a)
 
         pass
 
@@ -2167,9 +2266,9 @@ def updatecustomer1(event):
     e123 = Entry(f4)
     e123.grid(row=0, column=1)
 
-    def searchbyname():
-        namea = e123.get()
-        nameaup = namea.upper()
+    def searchbyname1(qw):
+        global f4
+        nameaup = qw.upper()
         f4 = Frame(root, background="pink", width=100, height=15, borderwidth=6, relief=SUNKEN)
         f4.grid(row=1, column=2, sticky="nsew")
         connection = sqlite3.connect("mytables4.db")
@@ -2274,6 +2373,10 @@ def updatecustomer1(event):
             Button(f4, text="UPDATE CUSTOMER", command=update).grid(row=2, column=4, columnspan=2, padx=25)
 
         pass
+    def searchbyname():
+        namea = e123.get()
+        f4.destroy()
+        searchbyname1(namea)
 
     Button(f4, text="SEARCH", command=searchbyname).grid(row=0, column=3, columnspan=2, padx=25)
     l2 = Label(f4, text="SEARCH BY CITY", width=18)
@@ -2281,7 +2384,9 @@ def updatecustomer1(event):
     e234 = Entry(f4)
     e234.grid(row=1, column=1)
 
-    def searchbycity():
+    def searchbycity1(namesa):
+        global f3
+        global f4
         f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
         f3.grid(row=0, column=2, sticky="nsew")
         f4 = Frame(root, background="pink", width=100, borderwidth=6, relief=SUNKEN)
@@ -2321,7 +2426,7 @@ def updatecustomer1(event):
         # columns built
         connection = sqlite3.connect("mytables4.db")
         crsr = connection.cursor()
-        crsr.execute(f"SELECT * FROM custom9 WHERE CITY = '{e234.get()}'")
+        crsr.execute(f"SELECT * FROM custom9 WHERE CITY = '{namesa}'")
         d = crsr.fetchall()
 
         for row in d:
@@ -2329,6 +2434,13 @@ def updatecustomer1(event):
             treev.insert("", 'end', values=s)
 
         pass
+    def searchbycity():
+        namesa=e234.get()
+        f3.destroy()
+        f4.destroy()
+        searchbycity1(namesa)
+
+
 
     Button(f4, text="SEARCH", command=searchbycity).grid(row=1, column=3, columnspan=2, padx=25)
 
@@ -2394,228 +2506,262 @@ def showcustomer1(event):
 
     pass
 
-    def clickedrow1(event):
-        global f3
+    def clickedrow(event):
         item = treev.identify_row(event.y)
         if item:
             a = treev.item(item, 'values')
             a = list(a)
-            f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-            f3.grid(row=0, column=2, rowspan=2, sticky="nsew")
-
-            treev1 = ttk.Treeview(f3, selectmode='browse', height=34)
-            treev1.pack(fill=BOTH)
-            scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev1.xview)
-            scrollbar.pack(side=BOTTOM, fill=X)
-            treev1.configure(xscrollcommand=scrollbar.set)
-            treev1.configure(xscrollcommand=scrollbar.set)
-            treev1["columns"] = ("1", "2", "3", "4", "5")
-
-            # Defining heading
-            treev1['show'] = 'headings'
-
-            # Assigning the width and anchor to  the
-            # respective columns
-            treev1.column("1", anchor='c')
-            treev1.column("2", anchor='c')
-            treev1.column("3", anchor='c')
-            treev1.column("4", anchor='c')
-            treev1.column("5", anchor='c')
-
-            # Assigning the heading names to the
-            # respective columns
-            treev1.heading("1", text="BILLNO")
-            treev1.heading("2", text="BUYER")
-            treev1.heading("3", text="DATE")
-            treev1.heading("4", text="CREDIT")
-            treev1.heading("5", text="DEBIT")
-
-            connection = sqlite3.connect("mytables4.db")
-            crsr = connection.cursor()
-            print(a[0])
-            crsr.execute(f"SELECT * FROM billstock5 WHERE BUYER = '{a[0]}'")
-            d = crsr.fetchall()
-            connection.close()
-            print(d)
-
-            dict = {}
-            for row in d:
-                if row[0] not in dict:
-                    dict[row[0]] = [row[1], row[7], "", row[9]]
-                else:
-                    tot = dict[row[0]][3]
-                    dict[row[0]][3] = float(tot) + float(row[9])
-            tes = dict.items()
-            tes = list(tes)
-            newres = []
-            for i in tes:
-                k = []
-                j = list(i)
-                k.append(j[0])
-                for h in j[1]:
-                    k.append(h)
-
-                newres.append(k)
-
-            connection = sqlite3.connect("mytables4.db")
-            crsr = connection.cursor()
-            print(a[0])
-            crsr.execute(f"SELECT * FROM credittable WHERE NAME = '{a[0]}'")
-            dome = crsr.fetchall()
-            connection.close()
-            print(dome)
-            for erw in dome:
-                s = []
-                if (erw[2] == 'CANCEL BILLED'):
-                    s.append(f"CANCEL BILL {erw[1]}")
-                else:
-                    s.append('CREDIT')
-                s.append(erw[0])
-                s.append(erw[4])
-                s.append(erw[3])
-                s.append("")
-                newres.append(s)
-            reswer = []
-            for s in newres:
-                qwq = s[2].split('-')
-                if (len(qwq[0]) == 1):
-                    qwq[0] = '0' + qwq[0]
-                if (len(qwq[1]) == 1):
-                    qwq[1] = '0' + qwq[1]
-                qwq.reverse()
-                re = ''.join(qwq)
-                s.append(re)
-            reswer = sorted(newres, key=lambda x: x[5])
-            print(reswer)
-            for s in reswer:
-                s.pop()
-                treev1.insert("", 'end', values=s, tags=(s[0],))
-            treev1.tag_configure('CREDIT', background='light green')
-
-            def opencustbill1(event):
+            def qwsax1(a):
                 global f3
-                global f4
-                print("now show the new one")
-                item = treev1.identify_row(event.y)
-                if item:
-                    a = treev1.item(item, 'values')
-                    a = list(a)
-                    if a[0] != "CREDIT":
-                        f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-                        f3.grid(row=0, column=2, sticky="nsew")
+                f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                f3.grid(row=0, column=2, rowspan=2, sticky="nsew")
 
-                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
-                        f4.grid(row=1, column=2, sticky="nsew")
-                        treev2 = ttk.Treeview(f3, selectmode='browse', height=20)
-                        treev2.pack(fill=BOTH)
-                        scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev2.xview)
-                        scrollbar.pack(side=BOTTOM, fill=X)
-                        treev2["columns"] = ("1", "2", "3", "4", "5", "6", "7")
-                        treev2.configure(xscrollcommand=scrollbar.set)
-                        treev2['show'] = 'headings'
+                treev1 = ttk.Treeview(f3, selectmode='browse', height=34)
+                treev1.pack(fill=BOTH)
+                scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev1.xview)
+                scrollbar.pack(side=BOTTOM, fill=X)
+                treev1.configure(xscrollcommand=scrollbar.set)
+                treev1.configure(xscrollcommand=scrollbar.set)
+                treev1["columns"] = ("1", "2", "3", "4", "5")
 
-                        treev2.column("1", anchor='c')
-                        treev2.column("2", width=200, anchor='c')
-                        treev2.column("3", width=80, anchor='c')
-                        treev2.column("4", width=80, anchor='c')
-                        treev2.column("5", width=80, anchor='c')
-                        treev2.column("6", width=80, anchor='c')
-                        treev2.column("7", width=80, anchor='c')
-                        na = a[1]
-                        na = na.upper()
-                        connection = sqlite3.connect("mytables4.db")
-                        crsr = connection.cursor()
-                        crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
-                        sel = crsr.fetchall()
-                        connection.close()
-                        sel = list(sel[0])
-                        r1 = ("NAME", sel[0], "", "BILLNO", a[0], "", "")
-                        r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
-                        r3 = ("ADD2", sel[2], "", "DATE", a[2], "", "")
-                        treev2.insert("", 'end', values=r1)
-                        treev2.insert("", 'end', values=r2)
-                        treev2.insert("", 'end', values=r3)
-                        r31 = ("", "", "", "", "", "", "")
-                        treev2.insert("", 'end', values=r31)
+                # Defining heading
+                treev1['show'] = 'headings'
 
-                        connection = sqlite3.connect("mytables4.db")
-                        crsr = connection.cursor()
-                        crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNo ='{a[0]}'")
-                        d = crsr.fetchall()
-                        connection.close()
-                        total = []
-                        for i in d:
-                            listforinsert = []
-                            listforinsert.append(i[2])
-                            listforinsert.append(i[3])
-                            listforinsert.append(i[4])
-                            listforinsert.append(i[5])
-                            listforinsert.append(i[6])
-                            listforinsert.append(i[8])
-                            listforinsert.append(i[9])
-                            total.append(int(i[9]))
-                            print(listforinsert)
-                            treev2.insert("", 'end', values=listforinsert)
-                        r312 = ("", "", "", "", "", "", "")
-                        treev2.insert("", 'end', values=r312)
-                        r32 = ("", "", "", "", "", "", "")
-                        treev2.insert("", 'end', values=r32)
-                        r33 = ("", "", "", "", "TOTAL", "", sum(total))
-                        treev2.insert("", 'end', values=r33, tags=('tot',))
-                        treev2.tag_configure('tot', background='light blue')
+                # Assigning the width and anchor to  the
+                # respective columns
+                treev1.column("1", anchor='c')
+                treev1.column("2", anchor='c')
+                treev1.column("3", anchor='c')
+                treev1.column("4", anchor='c')
+                treev1.column("5", anchor='c')
+
+                # Assigning the heading names to the
+                # respective columns
+                treev1.heading("1", text="BILLNO")
+                treev1.heading("2", text="BUYER")
+                treev1.heading("3", text="DATE")
+                treev1.heading("4", text="CREDIT")
+                treev1.heading("5", text="DEBIT")
+
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                print(a[0])
+                crsr.execute(f"SELECT * FROM billstock5 WHERE BUYER = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}' ")
+                d = crsr.fetchall()
+                connection.close()
+                print(d)
+
+                dict = {}
+                for row in d:
+                    if row[0] not in dict:
+                        dict[row[0]] = [row[1], row[7], "", row[9]]
                     else:
-                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
-                        f4.grid(row=1, column=2, sticky="nsew")
-                        connection = sqlite3.connect("mytables4.db")
-                        crsr = connection.cursor()
-                        crsr.execute(
-                            f"SELECT * FROM credittable WHERE NAME = '{a[1]}' AND AMOUNT = '{a[3]}' AND DATE ='{a[2]}'")
-                        damw = crsr.fetchall()
-                        connection.close()
-                        print(damw)
-                        dawn = list(damw[0])
-                        l1 = Label(f4, text=f"NAME", width=8)
-                        l1.grid(row=0, column=0, padx=5, pady=5)
-                        e1 = Entry(f4)
-                        e1.grid(row=0, column=1)
-                        l2 = Label(f4, text="TYPE", padx=5, width=8)
-                        l2.grid(row=1, column=0, padx=5, pady=5)
-                        e2 = Entry(f4)
-                        e2.grid(row=1, column=1)
-                        l3 = Label(f4, text="TRANSAC. NO", padx=5, width=8)
-                        l3.grid(row=2, column=0, padx=5, pady=5)
-                        e3 = Entry(f4)
-                        e3.grid(row=2, column=1)
-                        l4 = Label(f4, text="AMOUNT", padx=5, width=8)
-                        l4.grid(row=0, column=2, padx=5, pady=5)
-                        e4 = Entry(f4)
-                        e4.grid(row=0, column=3)
-                        l5 = Label(f4, text="DATE", padx=5, width=8)
-                        l5.grid(row=1, column=2, padx=5, pady=5)
-                        e5 = Entry(f4)
-                        e5.grid(row=1, column=3)
-                        e1.insert(0, dawn[0])
-                        e2.insert(0, dawn[1])
-                        e3.insert(0, dawn[2])
-                        e4.insert(0, dawn[3])
-                        e5.insert(0, dawn[4])
-
+                        tot = dict[row[0]][3]
+                        dict[row[0]][3] = float(tot) + float(row[9])
+                tes = dict.items()
+                tes = list(tes)
+                tot_deb=0
+                newres = []
+                for i in tes:
+                    k = []
+                    j = list(i)
+                    print('gk',j)
+                    k.append(j[0])
+                    for h in j[1]:
+                        k.append(h)
+                    if 'C' in j[0]:
                         pass
+                    else:
+                        tot_deb=tot_deb + float(j[1][3])
 
-                pass
-            def opencustbill(event):
+                    newres.append(k)
+
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                print(a[0])
+                crsr.execute(f"SELECT * FROM credittable WHERE NAME = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}'")
+                dome = crsr.fetchall()
+                connection.close()
+                print(dome)
+                tot_cre=0
+                for erw in dome:
+                    s = []
+                    if (erw[2] == 'CANCEL BILLED'):
+                        s.append(f"CANCEL BILL {erw[1]}")
+                    else:
+                        s.append('CREDIT')
+                    s.append(erw[0])
+                    s.append(erw[4])
+                    s.append(erw[3])
+                    s.append("")
+                    newres.append(s)
+                    tot_cre=tot_cre + float(erw[3])
+                reswer = []
+                for s in newres:
+                    qwq = s[2].split('-')
+                    re = ''.join(qwq)
+                    s.append(int(re))
+                reswer = sorted(newres, key=lambda x: x[5])
+                reswer.reverse()
+                for s in reswer:
+                    s.pop()
+                    asz=s[0]
+                    if s[0]=='CREDIT':
+                        treev1.insert("", 'end', values=s, tags=(s[0],))
+                    elif asz[0]=="C" and asz != 'CREDIT':
+                        treev1.insert("", 'end', values=s, tags=('Car',))
+                    else:
+                        treev1.insert("", 'end', values=s, tags=('sale',))
+                s12=["","","","",""]
+                treev1.insert("", 'end', values=s12)
+                s23=["","","TOTAL",tot_cre,tot_deb]
+                treev1.insert("", 'end', values=s23)
+
+
+
+
+                treev1.tag_configure('CREDIT', background='light green')
+                treev1.tag_configure('Car', background='light blue')
+
+
+                def opencustbill(event):
+
+                    print("now show the new one")
+                    item = treev1.identify_row(event.y)
+                    if item:
+                        a = treev1.item(item, 'values')
+                        a = list(a)
+                        if a[2] != "TOTAL":
+                            if a[2]!='':
+                                def qwaaz1(a):
+                                    global f3
+                                    global f4
+                                    if a[0] != "CREDIT":
+
+                                        f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                                        f3.grid(row=0, column=2, sticky="nsew")
+
+                                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
+                                        f4.grid(row=1, column=2, sticky="nsew")
+                                        treev2 = ttk.Treeview(f3, selectmode='browse', height=20)
+                                        treev2.pack(fill=BOTH)
+                                        scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev2.xview)
+                                        scrollbar.pack(side=BOTTOM, fill=X)
+                                        treev2["columns"] = ("1", "2", "3", "4", "5", "6", "7")
+                                        treev2.configure(xscrollcommand=scrollbar.set)
+                                        treev2['show'] = 'headings'
+
+                                        treev2.column("1", anchor='c')
+                                        treev2.column("2", width=200, anchor='c')
+                                        treev2.column("3", width=80, anchor='c')
+                                        treev2.column("4", width=80, anchor='c')
+                                        treev2.column("5", width=80, anchor='c')
+                                        treev2.column("6", width=80, anchor='c')
+                                        treev2.column("7", width=80, anchor='c')
+                                        na = a[1]
+                                        na = na.upper()
+                                        connection = sqlite3.connect("mytables4.db")
+                                        crsr = connection.cursor()
+                                        crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                                        sel = crsr.fetchall()
+                                        connection.close()
+                                        sel = list(sel[0])
+                                        r1 = ("NAME", sel[0], "", "BILLNO", a[0], "", "")
+                                        r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
+                                        r3 = ("ADD2", sel[2], "", "DATE", a[2], "", "")
+                                        treev2.insert("", 'end', values=r1)
+                                        treev2.insert("", 'end', values=r2)
+                                        treev2.insert("", 'end', values=r3)
+                                        r31 = ("", "", "", "", "", "", "")
+                                        treev2.insert("", 'end', values=r31)
+
+                                        connection = sqlite3.connect("mytables4.db")
+                                        crsr = connection.cursor()
+                                        crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNo ='{a[0]}'")
+                                        d = crsr.fetchall()
+                                        connection.close()
+                                        total = []
+                                        for i in d:
+                                            listforinsert = []
+                                            listforinsert.append(i[2])
+                                            listforinsert.append(i[3])
+                                            listforinsert.append(i[4])
+                                            listforinsert.append(i[5])
+                                            listforinsert.append(i[6])
+                                            listforinsert.append(i[8])
+                                            listforinsert.append(i[9])
+                                            total.append(int(i[9]))
+                                            print(listforinsert)
+                                            treev2.insert("", 'end', values=listforinsert)
+                                        r312 = ("", "", "", "", "", "", "")
+                                        treev2.insert("", 'end', values=r312)
+                                        r32 = ("", "", "", "", "", "", "")
+                                        treev2.insert("", 'end', values=r32)
+                                        r33 = ("", "", "", "", "TOTAL", "", sum(total))
+                                        treev2.insert("", 'end', values=r33, tags=('tot',))
+                                        treev2.tag_configure('tot', background='light blue')
+                                    else:
+                                        f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                                        f3.grid(row=0, column=2, sticky="nsew")
+                                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
+                                        f4.grid(row=1, column=2, sticky="nsew")
+                                        connection = sqlite3.connect("mytables4.db")
+                                        crsr = connection.cursor()
+                                        crsr.execute(
+                                            f"SELECT * FROM credittable WHERE NAME = '{a[1]}' AND AMOUNT = '{a[3]}' AND DATE ='{a[2]}'")
+                                        damw = crsr.fetchall()
+                                        connection.close()
+                                        print(damw)
+                                        dawn = list(damw[0])
+                                        l1 = Label(f4, text=f"NAME", width=8)
+                                        l1.grid(row=0, column=0, padx=5, pady=5)
+                                        e1 = Entry(f4)
+                                        e1.grid(row=0, column=1)
+                                        l2 = Label(f4, text="TYPE", padx=5, width=8)
+                                        l2.grid(row=1, column=0, padx=5, pady=5)
+                                        e2 = Entry(f4)
+                                        e2.grid(row=1, column=1)
+                                        l3 = Label(f4, text="TRANSAC. NO", padx=5, width=8)
+                                        l3.grid(row=2, column=0, padx=5, pady=5)
+                                        e3 = Entry(f4)
+                                        e3.grid(row=2, column=1)
+                                        l4 = Label(f4, text="AMOUNT", padx=5, width=8)
+                                        l4.grid(row=0, column=2, padx=5, pady=5)
+                                        e4 = Entry(f4)
+                                        e4.grid(row=0, column=3)
+                                        l5 = Label(f4, text="DATE", padx=5, width=8)
+                                        l5.grid(row=1, column=2, padx=5, pady=5)
+                                        e5 = Entry(f4)
+                                        e5.grid(row=1, column=3)
+                                        e1.insert(0, dawn[0])
+                                        e2.insert(0, dawn[1])
+                                        e3.insert(0, dawn[2])
+                                        e4.insert(0, dawn[3])
+                                        e5.insert(0, dawn[4])
+
+                                        pass
+                                def qwaaz():
+                                    f3.destroy()
+                                    f4.destroy()
+                                    qwaaz1(a)
+                                qwaaz()
+
+                    pass
+
+
+                treev1.bind("<Double-Button-1>", opencustbill)
+            def qwsax():
                 f3.destroy()
-                opencustbill1(event)
+                qwsax1(a)
+            qwsax()
 
-            treev1.bind("<Double-Button-1>", opencustbill)
+
         else:
             print("Nothing it have")
 
         pass
 
-    def clickedrow(event):
-        f3.destroy()
-        clickedrow1(event)
+
 
     treev.bind("<Double-Button-1>", clickedrow)
 
@@ -2697,7 +2843,7 @@ def addpayment1(event):
     def keyup(e):
         drop.event_generate("<Down>")
 
-    def contin1():
+    def contin1(name):
         global f2
         global f3
         global f4
@@ -2710,7 +2856,6 @@ def addpayment1(event):
         f3.grid(row=0, column=2, sticky="nsew")
         f4 = Frame(root, background="pink", width=100, borderwidth=6, relief=SUNKEN)
         f4.grid(row=1, column=2, sticky="nsew")
-        name = drop.get()
         l1 = Label(f4, text=f"{name}", width=8)
         l1.grid(row=0, column=0, columnspan=2, padx=5, pady=5)
 
@@ -2763,9 +2908,10 @@ def addpayment1(event):
                     asd.append(as1)
                 else:
                     tsmg.showinfo("FORMAT", "Wrong date format")
-                    return 1
+                    return
             except Exception as e:
                 print(e)
+                return
 
             sa = f'''INSERT INTO credittable VALUES ("{asd[0]}","{asd[1]}","{asd[2]}","{asd[3]}","{asd[4]}")'''
             try:
@@ -2784,22 +2930,20 @@ def addpayment1(event):
                 connection.commit()
                 connection.close()
                 tsmg.showinfo("successful", "your credis has been saved")
-                addpayment(event)
-
             except Exception as e:
                 tsmg.showinfo("warning !", "something went wrong")
                 print(e)
-                addpayment(event)
 
             pass
 
         Button(f4, text="SAVE CREDIT", command=savecredit).grid(row=2, column=2, columnspan=2, padx=25)
         pass
     def contin():
+        name = drop.get()
         f2.destroy()
         f3.destroy()
         f4.destroy()
-        contin1()
+        contin1(name)
 
     drop.bind("<KeyRelease>", keydown)
     drop.bind("<Return>", keyup)
@@ -2818,8 +2962,9 @@ def showbill1(event):
     global f4
     connection = sqlite3.connect("mytables4.db")
     crsr = connection.cursor()
-    crsr.execute(f"SELECT * FROM billstock5 WHERE DATE > '{from_date}' AND DATE < '{to_date}'")
+    crsr.execute(f"SELECT * FROM billstock5 WHERE DATE >= '{from_date}' AND DATE <= '{to_date}'")
     d = crsr.fetchall()
+    print(d)
     connection.close()
     f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
     f3.grid(row=0, column=2, sticky="nsew")
@@ -2893,80 +3038,84 @@ def showbill1(event):
             treev.insert("", 'end', values=s)
     treev.tag_configure('cancelbill', background='red', foreground='white')
 
-    def clickedrow1(event):
-        global f3
+    def clickedrow(event):
         print("now show the new one")
         item = treev.identify_row(event.y)
         if item:
             a = treev.item(item, 'values')
             a = list(a)
-            f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
-            f3.grid(row=0, column=2, sticky="nsew")
-            treev1 = ttk.Treeview(f3, selectmode='browse', height=20)
-            treev1.pack(fill=BOTH)
-            scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev1.xview)
-            scrollbar.pack(side=BOTTOM, fill=X)
-            treev1["columns"] = ("1", "2", "3", "4", "5", "6", "7")
-            treev1.configure(xscrollcommand=scrollbar.set)
-            treev1['show'] = 'headings'
+            def qwertfd(a):
+                global f3
+                f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
+                f3.grid(row=0, column=2, sticky="nsew")
+                treev1 = ttk.Treeview(f3, selectmode='browse', height=20)
+                treev1.pack(fill=BOTH)
+                scrollbar = ttk.Scrollbar(f3, orient='horizontal', command=treev1.xview)
+                scrollbar.pack(side=BOTTOM, fill=X)
+                treev1["columns"] = ("1", "2", "3", "4", "5", "6", "7")
+                treev1.configure(xscrollcommand=scrollbar.set)
+                treev1['show'] = 'headings'
 
-            treev1.column("1", anchor='c')
-            treev1.column("2", width=200, anchor='c')
-            treev1.column("3", width=80, anchor='c')
-            treev1.column("4", width=80, anchor='c')
-            treev1.column("5", width=80, anchor='c')
-            treev1.column("6", width=80, anchor='c')
-            treev1.column("7", width=80, anchor='c')
-            na = a[1]
-            na = na.upper()
-            connection = sqlite3.connect("mytables4.db")
-            crsr = connection.cursor()
-            crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
-            sel = crsr.fetchall()
-            connection.close()
-            sel = list(sel[0])
-            r1 = ("NAME", sel[0], "", "BILLNO", a[0], "", "")
-            r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
-            r3 = ("ADD2", sel[2], "", "DATE", a[2], "", "")
-            treev1.insert("", 'end', values=r1)
-            treev1.insert("", 'end', values=r2)
-            treev1.insert("", 'end', values=r3)
-            r31 = ("", "", "", "", "", "", "")
-            treev1.insert("", 'end', values=r31)
+                treev1.column("1", anchor='c')
+                treev1.column("2", width=200, anchor='c')
+                treev1.column("3", width=80, anchor='c')
+                treev1.column("4", width=80, anchor='c')
+                treev1.column("5", width=80, anchor='c')
+                treev1.column("6", width=80, anchor='c')
+                treev1.column("7", width=80, anchor='c')
+                na = a[1]
+                na = na.upper()
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                sel = crsr.fetchall()
+                connection.close()
+                sel = list(sel[0])
+                r1 = ("NAME", sel[0], "", "BILLNO", a[0], "", "")
+                r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
+                r3 = ("ADD2", sel[2], "", "DATE", a[2], "", "")
+                treev1.insert("", 'end', values=r1)
+                treev1.insert("", 'end', values=r2)
+                treev1.insert("", 'end', values=r3)
+                r31 = ("", "", "", "", "", "", "")
+                treev1.insert("", 'end', values=r31)
 
-            connection = sqlite3.connect("mytables4.db")
-            crsr = connection.cursor()
-            crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNo ='{a[0]}'")
-            d = crsr.fetchall()
-            connection.close()
-            total = []
-            for i in d:
-                listforinsert = []
-                listforinsert.append(i[2])
-                listforinsert.append(i[3])
-                listforinsert.append(i[4])
-                listforinsert.append(i[5])
-                listforinsert.append(i[6])
-                listforinsert.append(i[8])
-                listforinsert.append(i[9])
-                try:
-                    total.append(int(i[9]))
-                except Exception as e:
-                    print(e)
-                print(listforinsert)
-                treev1.insert("", 'end', values=listforinsert)
-            r312 = ("", "", "", "", "", "", "")
-            treev1.insert("", 'end', values=r312)
-            r32 = ("", "", "", "", "", "", "")
-            treev1.insert("", 'end', values=r32)
-            r33 = ("", "", "", "", "TOTAL", "", sum(total))
-            treev1.insert("", 'end', values=r33, tags=('tot',))
-            treev1.tag_configure('tot', background='light blue')
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNo ='{a[0]}'")
+                d = crsr.fetchall()
+                connection.close()
+                total = []
+                for i in d:
+                    listforinsert = []
+                    listforinsert.append(i[2])
+                    listforinsert.append(i[3])
+                    listforinsert.append(i[4])
+                    listforinsert.append(i[5])
+                    listforinsert.append(i[6])
+                    listforinsert.append(i[8])
+                    listforinsert.append(i[9])
+                    try:
+                        total.append(int(i[9]))
+                    except Exception as e:
+                        print(e)
+                    print(listforinsert)
+                    treev1.insert("", 'end', values=listforinsert)
+                r312 = ("", "", "", "", "", "", "")
+                treev1.insert("", 'end', values=r312)
+                r32 = ("", "", "", "", "", "", "")
+                treev1.insert("", 'end', values=r32)
+                r33 = ("", "", "", "", "TOTAL", "", sum(total))
+                treev1.insert("", 'end', values=r33, tags=('tot',))
+                treev1.tag_configure('tot', background='light blue')
+            def qsar(a):
+                f3.destroy()
+                qwertfd(a)
+            qsar(a)
+
 
         pass
-    def clickedrow(event):
-        f3.destroy()
-        clickedrow1(event)
+
 
     treev.bind("<Double-Button-1>", clickedrow)
     pass
@@ -2985,7 +3134,7 @@ def showpayments1(events):
     f4.grid(row=1, column=2, sticky="nsew")
     connection = sqlite3.connect("mytables4.db")
     crsr = connection.cursor()
-    crsr.execute(f"SELECT * FROM credittable WHERE DATE >'{from_date}' AND DATE < '{to_date}'")
+    crsr.execute(f"SELECT * FROM credittable WHERE DATE >='{from_date}' AND DATE <= '{to_date}'")
     d = crsr.fetchall()
     connection.close()
     treev = ttk.Treeview(f3, selectmode='browse', height=19)
@@ -3264,7 +3413,7 @@ def updatebill1(event):
     e1.grid(row=0, column=1)
     e1.focus()
 
-    def upbill1():
+    def upbill1(e1get):
         global f3
         global f4
         f3 = Frame(root, background="bisque", width=100, height=100, borderwidth=6, relief=SUNKEN)
@@ -3273,10 +3422,10 @@ def updatebill1(event):
         f4.grid(row=1, column=2, sticky="nsew")
         connection = sqlite3.connect("mytables4.db")
         crsr = connection.cursor()
-        qwwq = e1.get()
+        qwwq = e1get
         qwerewq = qwwq.split('-')
         if (len(qwerewq) == 1):
-            crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO= '{e1.get()}'")
+            crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO= '{e1get}'")
             d = crsr.fetchall()
             connection.close()
 
@@ -3398,12 +3547,12 @@ def updatebill1(event):
                         conn.execute(f"UPDATE custom9 SET TOTAL = '{new_tot}' where NAME='{na}'")
                         connection.commit()
                         connection.close()
-                        connection = sqlite3.connect("mytables4.db")
-                        cursor = connection.cursor()
-                        sa = f'''INSERT INTO credittable VALUES ("{na}","C-{de[0][0]}","CANCEL BILLED","{sum(totka)}","{de[0][7]}")'''
-                        cursor.execute(sa)
-                        connection.commit()
-                        connection.close()
+                        # connection = sqlite3.connect("mytables4.db")
+                        # cursor = connection.cursor()
+                        # sa = f'''INSERT INTO credittable VALUES ("{na}","C-{de[0][0]}","CANCEL BILLED","{sum(totka)}","{de[0][7]}")'''
+                        # cursor.execute(sa)
+                        # connection.commit()
+                        # connection.close()
 
                         connection = sqlite3.connect('mytables4.db')
                         connection.execute(f"UPDATE billstock5 SET BILLNO = 'C-{d[0][0]}' where BILLNO='{d[0][0]}'")
@@ -3423,9 +3572,10 @@ def updatebill1(event):
             tsmg.showinfo("Sorry", "Can't update cancelled bill ! ")
             addbundle(event)
     def upbill():
+        e1get=e1.get()
         f3.destroy()
         f4.destroy()
-        upbill1()
+        upbill1(e1get)
 
     Button(f4, text="UPDATE BILL", command=upbill).grid(row=1, column=0, columnspan=2)
 
@@ -3476,15 +3626,11 @@ def createbill1(event):
     def keyup(e):
         drop.event_generate("<Down>")
 
-    def contin12(eve):
+    def contin12(na):
         global f2
         global f3
         global f4
-        na = drop.get()
         na = na.upper()
-        f2.destroy()
-        f3.destroy()
-        f4.destroy()
         billbundlelist = []
         bnolist = []
         poplino = 0
@@ -3551,7 +3697,8 @@ def createbill1(event):
         connection.close()
         bunlis = []
         for i in w:
-            bunlis.append(i[3])
+            if(i[12]!='SOLD'):
+                bunlis.append(i[3])
         bunlis.reverse()
 
         l = Label(f2, text="BUNDLE NO", width=8)
@@ -3726,7 +3873,7 @@ def createbill1(event):
                             f2.grid(row=0, column=1, sticky="nsew", rowspan=2)
 
                             today = date.today()
-                            datetoday = today.strftime("%d-%m-%Y")
+                            datetoday = today.strftime("%Y-%m-%d")
                             bnolist1 = list(set(bnolist))
                             conn = sqlite3.connect('mytables4.db')
                             for i in bnolist1:
@@ -4078,8 +4225,12 @@ def createbill1(event):
         Button(f2, text="SEARCH", command=check).pack(pady=10)
 
     def contin(eve):
+        na=drop.get()
+        f2.destroy()
+        f3.destroy()
+        f4.destroy()
 
-        contin12(eve)
+        contin12(na)
 
     pass
     drop.bind("<KeyRelease>", keydown)
@@ -4203,8 +4354,8 @@ try:
     sat = "custom9"
     createcustomertable(sat)
 
-    tablename = "billstock5"
-    createbilltable(tablename)
+    tablename1 = "billstock5"
+    createbilltable(tablename1)
     billtablename = "billno9"
     createbillnotable(billtablename)
     connection = sqlite3.connect("mytables4.db")
