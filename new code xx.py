@@ -12,7 +12,6 @@ from datetime import date
 
 root = Tk()
 root.minsize(1200, 680)
-root.maxsize(1200, 680)
 
 root.title("Stocks")
 global f2
@@ -64,6 +63,53 @@ def createtable(tablename):
     connection.close()
 
     pass
+def showmax(eve):
+    connection = sqlite3.connect("mytables4.db")
+    crsr = connection.cursor()
+    crsr.execute(f"SELECT BUNDLE FROM stockfinal634")
+    w = crsr.fetchall()
+    connection.close()
+    k=[]
+    q = []
+    ep = []
+    for i in w:
+        if 'r-' in i[0] or 'R-' in i[0]:
+            q.append(i[0])
+        elif 'EP-' in i[0] or 'ep-' in i[0]:
+            ep.append(i[0])
+    j=[]
+    for i in q:
+        i=i.split('-')
+        i=i[1]
+        j.append(int(i))
+    we=max(j)
+    we= 'R-'+str(we)
+    j=[]
+    for i in ep:
+        i = i.split('-')
+        i = i[1]
+        j.append(int(i))
+    ew= max(j)
+    ew = 'EP-'+str(ew)
+    t1 = Toplevel(background="bisque")
+    t1.title("RECORD")
+    t1.minsize(250, 150)
+    l1 = Label(t1, text="R-")
+    l1.grid(row=0, column=0, padx=5, pady=5)
+    e1 = Entry(t1)
+    e1.grid(row=0, column=1)
+    e1.focus()
+    l2 = Label(t1, text="EP-")
+    l2.grid(row=1, column=0, padx=5, pady=5)
+    e2 = Entry(t1)
+    e2.grid(row=1, column=1)
+    e1.insert(0,we)
+    e2.insert(0,ew)
+    def showmx():
+        t1.destroy()
+
+    t1.bind("<F4>", showmx)
+
 
 def addbundle1(event):
     global f3
@@ -4440,7 +4486,7 @@ def createbill1(event):
     for i in d:
         namelist.append(i[0])
     namelist = sorted(namelist)
-    drop = ttk.Combobox(f4, values=namelist)
+    drop = ttk.Combobox(f4, values=namelist,width=20)
     drop.pack()
 
     def keydown(e):
@@ -4542,6 +4588,7 @@ def createbill1(event):
             for i in bunlis:
                 if a in i:
                     checklist.append(i)
+            checklist.append("NEW BUNDLE")
             ese["values"] = checklist
 
         ese.bind("<KeyRelease>", keydown)
@@ -4553,545 +4600,1000 @@ def createbill1(event):
 
         def check():
 
-            connection = sqlite3.connect("mytables4.db")
-            crsr = connection.cursor()
-            crsr.execute(f"SELECT * FROM stockfinal634 WHERE BUNDLE ='{ese.get()}';")
-            w = crsr.fetchall()
-            if (len(w) == 0):
-
+            if ese.get()=="NEW BUNDLE":
                 f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
                 f4.grid(row=1, column=2, sticky="nsew")
-                Button(f4, text="NOT FOUND").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
-                pass
-
-            else:
-                d = list(w[0])
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                crsr.execute(f"SELECT * FROM stockfinal634")
+                waq = crsr.fetchall()
                 connection.close()
-                if (d[12] != "SOLD"):
-                    f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
-                    f4.grid(row=1, column=2, sticky="nsew")
-                    l1 = Label(f4, text="Bundle type", width=8)
-                    l1.grid(row=0, column=0, padx=5, pady=5)
-                    e1 = Entry(f4)
-                    e1.grid(row=0, column=1)
-                    l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
-                    l2.grid(row=1, column=0, padx=5, pady=5)
-                    e2 = Entry(f4)
-                    e2.grid(row=1, column=1)
-                    l3 = Label(f4, text="THK REMARK", padx=5, width=8)
-                    l3.grid(row=2, column=0, padx=5, pady=5)
-                    e3 = Entry(f4)
-                    e3.grid(row=2, column=1)
-                    l4 = Label(f4, text="BUNDLE", padx=5, width=8)
-                    l4.grid(row=3, column=0, padx=5, pady=5)
-                    e4 = Entry(f4)
-                    e4.grid(row=3, column=1)
-                    l5 = Label(f4, text="COVER", padx=5, width=8)
-                    l5.grid(row=4, column=0, padx=5, pady=5)
-                    e5 = Entry(f4)
-                    e5.grid(row=4, column=1)
-                    l6 = Label(f4, text="STM", padx=5, width=8)
-                    l6.grid(row=0, column=5, padx=5, pady=5)
-                    e6 = Entry(f4)
-                    e6.grid(row=0, column=6)
-                    l7 = Label(f4, text="R2", padx=5, width=8)
-                    l7.grid(row=0, column=3, padx=20, pady=5)
-                    e7 = Entry(f4)
-                    e7.grid(row=0, column=4)
-                    l8 = Label(f4, text="PCS", padx=5, width=8)
-                    l8.grid(row=1, column=3, padx=5, pady=5)
-                    e8 = Entry(f4)
-                    e8.grid(row=1, column=4)
-                    l9 = Label(f4, text="MM", padx=5, width=8)
-                    l9.grid(row=2, column=3, padx=5, pady=5)
-                    e9 = Entry(f4)
-                    e9.grid(row=2, column=4)
-                    l10 = Label(f4, text="KGS", padx=5, width=8)
-                    l10.grid(row=3, column=3, padx=5, pady=5)
-                    e10 = Entry(f4)
-                    e10.grid(row=3, column=4)
-                    l11 = Label(f4, text="PACKINGNO", padx=5, width=8)
-                    l11.grid(row=4, column=3, padx=5, pady=5)
-                    e11 = Entry(f4)
-                    e11.grid(row=4, column=4)
-                    l14 = Label(f4, text="TOTAL", padx=5, width=8)
-                    l14.grid(row=3, column=5, padx=5, pady=5)
-                    e14 = Entry(f4)
-                    e14.grid(row=3, column=6)
-                    l12 = Label(f4, text="RATE", padx=5, width=8)
-                    l12.grid(row=2, column=5, padx=5, pady=5)
-                    e12 = Entry(f4)
-                    e12.grid(row=2, column=6)
-                    l13 = Label(f4, text="STATUS", padx=5, width=8)
-                    l13.grid(row=1, column=5, padx=20, pady=5)
-                    e13 = Entry(f4)
-                    e13.grid(row=1, column=6, padx=5, pady=5)
-                    e1.insert(0, d[0])
-                    e2.insert(0, d[1])
-                    e3.insert(0, d[2])
-                    e4.insert(0, d[3])
-                    e5.insert(0, d[4])
-                    e6.insert(0, d[5])
-                    e7.insert(0, d[6])
-                    e8.insert(0, d[7])
-                    e9.insert(0, d[8])
-                    e10.insert(0, d[9])
-                    e11.insert(0, d[10])
-                    e13.insert(0, d[12])
-                    e12.focus()
-                    e12.bind("<KP_Enter>", lambda x: e14.focus())
-                    e12.bind("<Return>", lambda x: e14.focus())
+                bunlistype = []
+                for i in waq:
+                    bunlistype.append(i[0])
+                bunlistype = list(set(bunlistype))
 
-                    def addtobill(*args):
-                        nonlocal poplino
-                        nonlocal bunlis
-                        bunlis.remove(d[3])
-                        poplino = 1
-                        r4 = []
-                        r4.append(d[3])
-                        r4.append(d[0])
-                        r4.append(d[1]+d[2] + 'x'+d[8]+'mm')
-                        r4.append(d[7])
-                        r4.append(d[9])
-                        if e12.get() == '':
-                            r4.append('0')
-                        else:
-                            try:
-                                ew = e12.get()
-                                eew = float(ew)
-                                r4.append(int(eew))
-                            except Exception as e:
-                                print(e)
+
+                l1 = Label(f4, text="Bundle type", width=8)
+                l1.grid(row=0, column=0, padx=5, pady=5)
+                e1 = ttk.Combobox(f4, values=bunlistype, height=8, width=25)
+                e1.grid(row=0, column=1)
+                l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
+                l2.grid(row=1, column=0, padx=5, pady=5)
+                e2 = Entry(f4)
+                e2.grid(row=1, column=1)
+                l3 = Label(f4, text="THK REMARK", padx=5, width=8)
+                l3.grid(row=2, column=0, padx=5, pady=5)
+                e3 = Entry(f4)
+                e3.grid(row=2, column=1)
+                l4 = Label(f4, text="BUNDLE", padx=5, width=8)
+                l4.grid(row=3, column=0, padx=5, pady=5)
+                e4 = Entry(f4)
+                e4.grid(row=3, column=1)
+                l5 = Label(f4, text="COVER", padx=5, width=8)
+                l5.grid(row=4, column=0, padx=5, pady=5)
+                e5 = Entry(f4)
+                e5.grid(row=4, column=1)
+                l6 = Label(f4, text="STM", padx=5, width=8)
+                l6.grid(row=0, column=5, padx=5, pady=5)
+                e6 = Entry(f4)
+                e6.grid(row=0, column=6)
+                l7 = Label(f4, text="R2", padx=5, width=8)
+                l7.grid(row=0, column=3, padx=20, pady=5)
+                e7 = Entry(f4)
+                e7.grid(row=0, column=4)
+                l8 = Label(f4, text="PCS", padx=5, width=8)
+                l8.grid(row=1, column=3, padx=5, pady=5)
+                e8 = Entry(f4)
+                e8.grid(row=1, column=4)
+                l9 = Label(f4, text="MM", padx=5, width=8)
+                l9.grid(row=2, column=3, padx=5, pady=5)
+                e9 = Entry(f4)
+                e9.grid(row=2, column=4)
+                l10 = Label(f4, text="KGS", padx=5, width=8)
+                l10.grid(row=3, column=3, padx=5, pady=5)
+                e10 = Entry(f4)
+                e10.grid(row=3, column=4)
+                l11 = Label(f4, text="PACKINGNO", padx=5, width=8)
+                l11.grid(row=4, column=3, padx=5, pady=5)
+                e11 = Entry(f4)
+                e11.grid(row=4, column=4)
+                l12 = Label(f4, text="RATE", padx=5, width=8)
+                l12.grid(row=2, column=5, padx=5, pady=5)
+                e12 = Entry(f4)
+                e12.grid(row=2, column=6)
+                l13 = Label(f4, text="STATUS", padx=5, width=8)
+                l13.grid(row=1, column=5, padx=20, pady=5)
+                e13 = Entry(f4)
+                e13.insert(0,'INSTOCK')
+                e13.grid(row=1, column=6, padx=5, pady=5)
+                l14 = Label(f4, text="TOTAL", padx=5, width=8)
+                l14.grid(row=3, column=5, padx=5, pady=5)
+                e14 = Entry(f4)
+                e14.grid(row=3, column=6)
+
+                def keydown(event):
+                    ba = e1.get()
+                    a = ba.upper()
+                    checklistas = []
+                    for i in bunlistype:
+                        if a in i:
+                            checklistas.append(i)
+                    e1["values"] = checklistas
+
+                e1.bind("<KeyRelease>", keydown)
+
+                def keyup(event):
+                    e1.event_generate("<Down>")
+
+                e1.bind("<KP_Enter>", keyup)
+                e1.bind("<Return>", keyup)
+                def checkasw():
+                    today = date.today()
+                    datetodayqs = today.strftime("%Y-%m-%d")
+                    try:
+                        d1a=[]
+                        d1a.append(e1.get())
+                        d1a.append(e2.get())
+                        d1a.append(e3.get())
+                        d1a.append(e4.get())
+                        d1a.append(e5.get())
+                        d1a.append(e6.get())
+                        d1a.append(e7.get())
+                        d1a.append(e8.get())
+                        d1a.append(e9.get())
+                        d1a.append(e10.get())
+                        d1a.append(e11.get())
+                        d1a.append(datetodayqs)
+                        d1a.append(e13.get())
+                        d1a2=tuple(d1a)
+                        connection = sqlite3.connect("mytables4.db")
+                        cursor = connection.cursor()
+                        row = d1a2
+                        sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
+                        cursor.execute(sa)
+                        connection.commit()
+                        def addtobill(*args):
+                            d=d1a
+                            nonlocal poplino
+                            nonlocal bunlis
+                            poplino = 1
+                            r4 = []
+                            r4.append(d[3])
+                            r4.append(d[0])
+                            r4.append(d[1] + d[2] + 'x' + d[8] + 'mm')
+                            r4.append(d[7])
+                            r4.append(d[9])
+                            if e12.get() == '':
                                 r4.append('0')
-                                tsmg.showinfo("info", "sorry wrong input price")
+                            else:
+                                try:
+                                    ew = e12.get()
+                                    eew = float(ew)
+                                    r4.append(int(eew))
+                                except Exception as e:
+                                    print(e)
+                                    r4.append('0')
+                                    tsmg.showinfo("info", "sorry wrong input price")
 
-                        if e14.get() == '':
-                            r4.append('0')
-                        else:
-                            try:
-                                ew1 = e14.get()
-                                eew1 = float(ew1)
-                                r4.append(int(eew1))
-                            except Exception as e:
+                            if e14.get() == '':
                                 r4.append('0')
-                                tsmg.showinfo("info", "sorry wrong input price")
-                        r5 = []
+                            else:
+                                try:
+                                    ew1 = e14.get()
+                                    eew1 = float(ew1)
+                                    r4.append(int(eew1))
+                                except Exception as e:
+                                    r4.append('0')
+                                    tsmg.showinfo("info", "sorry wrong input price")
+                            r5 = []
 
-                        r5 = r4.copy()
-                        r5.insert(0, billno)
-                        if r5 not in billbundlelist:
-                            treev.insert("", 'end', values=r4)
-                            billbundlelist.append(r5)
-                            bnolist.append(d[3])
-                        else:
-                            tsmg.showinfo("info", "bundle no already in the bill")
-                        f4.destroy()
-
-                    b4 = Button(f2, text="SAVE BILL")
-                    b4.pack(pady=150)
-
-                    def savebill(event):
-                        nonlocal poplino
-                        if poplino == 0:
-                            tsmg.showinfo("alert", "no entry")
-                            createbill(event)
-
-                        else:
-                            f2 = Frame(root, background="pink", width=10, height=100, borderwidth=6, relief=SUNKEN)
-                            f2.grid(row=0, column=1, sticky="nsew", rowspan=2)
-
-                            today = date.today()
-                            datetoday = today.strftime("%Y-%m-%d")
-                            bnolist1 = list(set(bnolist))
-                            conn = sqlite3.connect('mytables4.db')
-                            for i in bnolist1:
-                                conn.execute(f"UPDATE stockfinal634 SET STATUS = 'SOLD' where BUNDLE='{i}'")
-                                conn.commit()
-                            conn.close()
-                            # now will update bill no
-                            connection = sqlite3.connect('mytables4.db')
-                            conn = connection.cursor()
-                            conn.execute("SELECT * FROM billno9 WHERE NAME = '1'")
-                            temp = conn.fetchall()
-                            tempno = int(temp[0][1])
-                            tempno = tempno + 1
-                            conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='1'")
-                            connection.commit()
-                            connection = sqlite3.connect("mytables4.db")
-                            cursor = connection.cursor()
-                            for i in billbundlelist:
-                                i.insert(6, datetoday)
-                                i.append(sel[0])
-                                sa = f'''INSERT INTO billstock5 VALUES ('{i[0]}','{i[9]}','{i[1]}','{i[2]}','{i[3]}','{i[4]}','{i[5]}','{i[6]}','{i[7]}','{i[8]}')'''
-                                cursor.execute(sa)
-                                connection.commit()
-                            connection.close()
-
-                            file = open('bill_location.txt', 'r')
-                            for e in file:
-                                mainloc = e
-                            workbook = xlsxwriter.Workbook(f'{mainloc}{billbundlelist[0][0]}.xlsx')
-                            worksheet = workbook.add_worksheet()
-
-                            connection = sqlite3.connect("mytables4.db")
-                            crsr = connection.cursor()
-                            crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO = '{billbundlelist[0][0]}'")
-                            w = crsr.fetchall()
-                            connection.close()
-                            d = list(w[0])
-                            na = d[1]
-                            connection = sqlite3.connect("mytables4.db")
-                            crsr = connection.cursor()
-                            crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
-                            selec = crsr.fetchall()
-                            connection.close()
-                            selec = list(selec[0])
-                            worksheet.set_column('A:A', 10)
-                            worksheet.set_column('B:B', 30)
-                            worksheet.set_column('C:C', 40)
-
-
-                            cell_format = workbook.add_format()
-                            cell_format.set_bottom(2)
-                            cell_format.set_top(2)
-
-                            cell_format2 = workbook.add_format()
-                            cell_format2.set_bottom(2)
-                            cell_format2.set_top(2)
-                            cell_format2.set_right(2)
-
-                            cell_format3 = workbook.add_format()
-                            cell_format3.set_bottom(2)
-                            cell_format3.set_top(2)
-                            cell_format3.set_right(2)
-                            cell_format3.set_left(2)
-
-                            cell_leftright = workbook.add_format()
-                            cell_leftright.set_right(2)
-                            cell_leftright.set_left(2)
-
-                            cell_leftbottom = workbook.add_format()
-                            cell_leftbottom.set_bottom(2)
-                            cell_leftbottom.set_bold(True)
-                            cell_leftbottom.set_left(2)
-
-                            cell_rightbottom = workbook.add_format()
-                            cell_rightbottom.set_bottom(2)
-                            cell_rightbottom.set_bold(True)
-                            cell_rightbottom.set_right(2)
-
-                            cell_bottom = workbook.add_format()
-                            cell_bottom.set_bottom(2)
-
-                            cell_bottom1 = workbook.add_format()
-                            cell_bottom1.set_bottom(2)
-                            cell_bottom1.set_bold(True)
-
-                            cell_right = workbook.add_format()
-                            cell_right.set_right(2)
-
-                            cell_left = workbook.add_format()
-                            cell_left.set_left(2)
-
-                            cell_righttop = workbook.add_format()
-                            cell_righttop.set_right(2)
-                            cell_righttop.set_top(2)
-
-                            cell_lefttop = workbook.add_format()
-                            cell_lefttop.set_left(2)
-                            cell_lefttop.set_top(2)
-
-                            cell_leftrighttop1 = workbook.add_format()
-                            cell_leftrighttop1.set_left(2)
-                            cell_leftrighttop1.set_top(2)
-                            cell_leftrighttop1.set_right(2)
-                            cell_leftrighttop1.set_font_size(20)
-                            cell_leftrighttop1.set_bold(True)
-                            cell_leftrighttop1.set_align('center')
-
-                            cell_leftrighttop = workbook.add_format()
-                            cell_leftrighttop.set_left(2)
-                            cell_leftrighttop.set_top(2)
-                            cell_leftrighttop.set_right(2)
-                            cell_leftrighttop.set_bold(True)
-
-                            cell_top = workbook.add_format()
-                            cell_top.set_top(2)
-                            worksheet.merge_range('A1:G3', "JAI MATA DI", cell_leftrighttop1)
-
-                            worksheet.write(3, 0, "NAME", cell_lefttop)
-                            worksheet.write(3, 1, selec[0], cell_righttop)
-                            worksheet.write(4, 0, "ADD1", cell_left)
-                            worksheet.write(4, 1, selec[1], cell_right)
-                            worksheet.write(5, 0, "ADD2", cell_left)
-                            worksheet.write(5, 1, selec[2], cell_right)
-                            worksheet.write(3, 2, "BILLNO", cell_top)
-                            worksheet.write(3, 4, "", cell_top)
-                            worksheet.write(3, 5, "", cell_top)
-                            worksheet.write(3, 6, "", cell_righttop)
-                            worksheet.write(4, 6, "", cell_right)
-                            worksheet.write(5, 6, "", cell_right)
-
-                            worksheet.write(3, 3, temp[0][1], cell_top)
-                            worksheet.write(4, 2, "MOBILENO")
-                            worksheet.write(4, 3, selec[5])
-                            worksheet.write(5, 2, "DATE")
-                            worksheet.write(5, 3, d[7])
-
-                            num = 6
-                            worksheet.write(num, 0, "BUNDLENO", cell_format3)
-                            worksheet.write(num, 1, "PRODUCT", cell_format)
-                            worksheet.write(num, 2, "SIZE", cell_format2)
-                            worksheet.write(num, 3, "PCS", cell_format2)
-                            worksheet.write(num, 4, "KG", cell_format2)
-                            worksheet.write(num, 5, "RATE", cell_format2)
-                            worksheet.write(num, 6, "TOTAL", cell_format2)
-
-                            worksheet.write(7, 0, "", cell_leftright)
-                            worksheet.write(7, 2, "", cell_right)
-                            worksheet.write(7, 3, "", cell_right)
-                            worksheet.write(7, 4, "", cell_right)
-                            worksheet.write(7, 5, "", cell_right)
-                            worksheet.write(7, 6, "", cell_right)
-                            num = 7
-                            total = []
-                            for i in w:
-                                num += 1
-                                worksheet.write(num, 0, i[2], cell_leftright)
-                                worksheet.write(num, 1, i[3])
-                                worksheet.write(num, 2, i[4], cell_right)
-                                worksheet.write(num, 3, i[5], cell_right)
-                                worksheet.write(num, 4, i[6], cell_right)
-                                worksheet.write(num, 5, i[8], cell_right)
-                                worksheet.write(num, 6, i[9], cell_right)
-                                total.append(int(i[9]))
-                            # worksheet.write(num + 1, 0, "", cell_leftright)
-                            # worksheet.write(num + 1, 2, "", cell_right)
-                            # worksheet.write(num + 1, 3, "", cell_right)
-                            # worksheet.write(num + 1, 4, "", cell_right)
-                            # worksheet.write(num + 1, 5, "", cell_right)
-                            # worksheet.write(num + 1, 6, "", cell_right)
-                            # worksheet.write(num + 2, 0, "", cell_lefttop)
-                            # worksheet.write(num + 2, 3, "", cell_top)
-                            # worksheet.write(num + 2, 4, "", cell_top)
-                            # worksheet.write(num + 2, 5, "TOTAL",cell_top)
-                            # worksheet.write(num + 2, 1, "BALANCE")
-                            # worksheet.write(num + 2,3,selec[7] )
-                            # worksheet.write(num + 3, 1, "NEW")
-                            # worksheet.write(num + 3, 2, f"+ {str(sum(total))}")
-                            # worksheet.write(num + 4, 1, "NEW BALC.")
-                            # worksheet.write(num + 4, 2, f"{ float(selec[7])+(total)}")
-                            #
-                            # worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
-                            # worksheet.write(num + 3, 0, "", cell_left)
-                            # worksheet.write(num + 3, 5, "", cell_top)
-                            # worksheet.write(num + 3, 6, "", cell_top)
-                            # worksheet.write(num + 4, 0, "", cell_left)
-                            # worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
-                            # worksheet.write(num + 5, 1, "", cell_bottom)
-                            # worksheet.write(num + 5, 2, "", cell_bottom)
-                            # worksheet.write(num + 5, 3, "", cell_bottom)
-                            # worksheet.write(num + 5, 4, "", cell_bottom)
-                            # worksheet.write(num + 5, 6, "", cell_rightbottom)
-                            #
-                            # worksheet.write(num + 5, 2, "", cell_rightbottom)
-                            # worksheet.write(num + 3, 6, "", cell_righttop)
-                            # worksheet.write(num + 4, 6, "", cell_right)
-                            # worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                            worksheet.write(num + 1, 0, "", cell_leftright)
-                            worksheet.write(num + 1, 2, "", cell_right)
-                            worksheet.write(num + 1, 3, "", cell_right)
-                            worksheet.write(num + 1, 4, "", cell_right)
-                            worksheet.write(num + 1, 5, "", cell_right)
-                            worksheet.write(num + 1, 6, "", cell_right)
-                            worksheet.write(num + 2, 0, "", cell_lefttop)
-                            worksheet.write(num + 2, 1, "", cell_top)
-                            worksheet.write(num + 2, 2, "", cell_righttop)
-                            worksheet.write(num + 2, 3, "", cell_top)
-                            worksheet.write(num + 2, 4, "", cell_top)
-                            worksheet.write(num + 2, 5, "TOTAL", cell_top)
-                            worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
-                            worksheet.write(num + 3, 0, "", cell_left)
-                            worksheet.write(num + 3, 5, "", cell_top)
-                            worksheet.write(num + 3, 6, "", cell_top)
-                            worksheet.write(num + 4, 0, "", cell_left)
-                            worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
-                            worksheet.write(num + 5, 1, "", cell_bottom)
-                            worksheet.write(num + 5, 2, "", cell_bottom)
-                            worksheet.write(num + 5, 3, "", cell_bottom)
-                            worksheet.write(num + 5, 4, "", cell_bottom)
-                            worksheet.write(num + 5, 6, "", cell_rightbottom)
-                            worksheet.write(num + 3, 0, "", cell_left)
-
-                            worksheet.write(num + 3, 1, "", cell_right)
-                            worksheet.write(num + 4, 1, "", cell_right)
-                            worksheet.write(num + 5, 2, "", cell_rightbottom)
-                            worksheet.write(num + 3, 6, "", cell_righttop)
-                            worksheet.write(num + 4, 6, "", cell_right)
-                            worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                            print(selec)
-                            worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",cell_leftrighttop)
-                            worksheet.write(num + 3, 2,f"     NEW                                             + {str(sum(total))}",cell_leftright)
-
-                            totka = sum(total)
-
-                            connection = sqlite3.connect('mytables4.db')
-                            conn = connection.cursor()
-                            conn.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
-                            sele = conn.fetchall()
-                            selecate = list(sele[0])
-                            totalW = float(selecate[7])
-                            newtotal = totalW + totka
-                            worksheet.write(num + 4, 2,f"     NEW BALC.                                 {newtotal}",cell_leftrighttop)
-
-                            conn.execute(f"UPDATE custom9 SET TOTAL = '{newtotal}' where NAME='{na}'")
-                            workbook.close()
-
-                            connection.commit()
-                            connection.close()
-
-                            tsmg.showinfo("Saved", "Your bill has been saved successfully")
-
-                            createbill(event)
-                            pass
-
-                    b4.bind('<Button-1>', savebill)
-                    var1 = IntVar()
-
-                    b5 = Button(f2, text="SPLIT BUNDLE")
-                    b5.pack(pady=20)
-
-                    def splitbundlewhilecreatingbill(event):
-                        t1 = Toplevel()
-                        t1.title("Split Bundle")
-                        t1.minsize(500, 500)
-                        f3 = Frame(t1, background="bisque", borderwidth=6, relief=SUNKEN)
-                        f3.grid(row=0, rowspan=2, column=0, sticky="nsew")
-                        f4 = Frame(t1, background="pink", borderwidth=6, relief=SUNKEN)
-                        f4.grid(row=2, column=0, sticky="nsew")
-                        t1.grid_columnconfigure(0)
-                        t1.grid_rowconfigure(0, weight=2)
-                        t1.grid_rowconfigure(1, weight=2)
-                        t1.grid_rowconfigure(2, weight=3)
-                        l1 = Label(f4, text="BUNDLE NUMBER YOU WANT TO SPLIT")
-                        l1.grid(row=0, column=0, padx=5, pady=5)
-                        e = Entry(f4)
-                        e.grid(row=0, column=1)
-                        e.focus()
-
-                        def checkewq():
-                            connection = sqlite3.connect("mytables4.db")
-                            crsr = connection.cursor()
-                            crsr.execute(f"SELECT * FROM stockfinal634 WHERE BUNDLE ='{e.get()}';")
-                            w = crsr.fetchall()
-                            if (len(w) == 0):
-                                tsmg.showinfo("Warning", "NOT IN STOCK")
+                            r5 = r4.copy()
+                            r5.insert(0, billno)
+                            if r5 not in billbundlelist:
+                                treev.insert("", 'end', values=r4)
+                                billbundlelist.append(r5)
+                                bnolist.append(d[3])
+                            else:
                                 pass
+                            f4.destroy()
+                        addtobill()
+
+                        def savebill(event):
+                            nonlocal poplino
+                            if poplino == 0:
+                                tsmg.showinfo("alert", "no entry")
+                                createbill(event)
 
                             else:
-                                d = list(w[0])
+                                f2 = Frame(root, background="pink", width=10, height=100, borderwidth=6, relief=SUNKEN)
+                                f2.grid(row=0, column=1, sticky="nsew", rowspan=2)
+
+                                today = date.today()
+                                datetoday = today.strftime("%Y-%m-%d")
+                                bnolist1 = list(set(bnolist))
+                                conn = sqlite3.connect('mytables4.db')
+                                for i in bnolist1:
+                                    conn.execute(f"UPDATE stockfinal634 SET STATUS = 'SOLD' where BUNDLE='{i}'")
+                                    conn.commit()
+                                conn.close()
+                                # now will update bill no
+                                connection = sqlite3.connect('mytables4.db')
+                                conn = connection.cursor()
+                                conn.execute("SELECT * FROM billno9 WHERE NAME = '1'")
+                                temp = conn.fetchall()
+                                tempno = int(temp[0][1])
+                                tempno = tempno + 1
+                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='1'")
+                                connection.commit()
+                                connection = sqlite3.connect("mytables4.db")
+                                cursor = connection.cursor()
+                                for i in billbundlelist:
+                                    i.insert(6, datetoday)
+                                    i.append(sel[0])
+                                    sa = f'''INSERT INTO billstock5 VALUES ('{i[0]}','{i[9]}','{i[1]}','{i[2]}','{i[3]}','{i[4]}','{i[5]}','{i[6]}','{i[7]}','{i[8]}')'''
+                                    cursor.execute(sa)
+                                    connection.commit()
                                 connection.close()
-                                if (d[12] == "SOLD"):
-                                    tsmg.showinfo("Warning", "ALREADY SOLD")
-                                else:
-                                    f4 = Frame(t1, background="pink", width=100, height=15, borderwidth=6,
-                                               relief=SUNKEN)
-                                    f4.grid(row=2, column=0, sticky="nsew")
-                                    strdat = str(d)
-                                    Label(f4, text=strdat).grid()
 
-                                    Label(f3, text=f"{d[3]}A").grid(row=1, column=0, columnspan=2, padx=10)
-                                    Label(f3, text=f"{d[3]}B").grid(row=1, column=2, columnspan=2, padx=10)
-                                    Label(f3, text="PCS").grid(row=2, column=0, padx=10, pady=15)
-                                    e1 = Entry(f3)
-                                    e1.grid(row=2, column=1)
-                                    Label(f3, text="PCS").grid(row=2, column=2, padx=10, pady=15)
-                                    e2 = Entry(f3)
-                                    e2.grid(row=2, column=3)
-                                    Label(f3, text="KGS").grid(row=3, column=0, padx=10, pady=15)
-                                    e3 = Entry(f3)
-                                    e3.grid(row=3, column=1)
-                                    Label(f3, text="KGS").grid(row=3, column=2, padx=10, pady=15)
-                                    e4 = Entry(f3)
-                                    e4.grid(row=3, column=3)
-                                    e1.focus()
-                                    # deleteifwanttodelete
-                                    e1.bind("<KP_Enter>", lambda x: e2.focus())
-                                    e1.bind("<Return>", lambda x: e2.focus())
-                                    e2.bind("<KP_Enter>", lambda x: e3.focus())
-                                    e2.bind("<Return>", lambda x: e3.focus())
-                                    e3.bind("<KP_Enter>", lambda x: e4.focus())
-                                    e3.bind("<Return>", lambda x: e4.focus())
+                                file = open('bill_location.txt', 'r')
+                                for e in file:
+                                    mainloc = e
+                                workbook = xlsxwriter.Workbook(f'{mainloc}{billbundlelist[0][0]}.xlsx')
+                                worksheet = workbook.add_worksheet()
 
-                                    def checkewd(*args):
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO = '{billbundlelist[0][0]}'")
+                                w = crsr.fetchall()
+                                connection.close()
+                                d = list(w[0])
+                                na = d[1]
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                                selec = crsr.fetchall()
+                                connection.close()
+                                selec = list(selec[0])
+                                worksheet.set_column('A:A', 10)
+                                worksheet.set_column('B:B', 30)
+                                worksheet.set_column('C:C', 40)
 
-                                        d1a = d.copy()
-                                        d1b = d.copy()
-                                        d1a[3] = f"{d[3]}A"
-                                        d1b[3] = f"{d[3]}B"
-                                        d1a[7] = e1.get()
-                                        d1b[7] = e2.get()
-                                        d1a[9] = e3.get()
-                                        d1b[9] = e4.get()
-                                        d1a[12] = "SPLIT"
-                                        d1b[12] = "SPLIT"
-                                        connection = sqlite3.connect("mytables4.db")
-                                        cursor = connection.cursor()
-                                        row = d1a
-                                        sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
-                                        cursor.execute(sa)
-                                        connection.commit()
-                                        row = d1b
-                                        sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
-                                        cursor.execute(sa)
-                                        connection.commit()
-                                        connection.close()
-                                        connection = sqlite3.connect("mytables4.db")
-                                        crsr = connection.cursor()
-                                        crsr.execute(f"DELETE FROM stockfinal634 WHERE BUNDLE ='{e.get()}';")
-                                        connection.commit()
-                                        connection.close()
-                                        tsmg.showinfo("completed", "Bundle Splited")
-                                        nonlocal bunlis
-                                        bunlis.append(f"{d[3]}A")
-                                        bunlis.append(f"{d[3]}B")
-                                        bunlis.remove(d[3])
+                                cell_format = workbook.add_format()
+                                cell_format.set_bottom(2)
+                                cell_format.set_top(2)
 
-                                        t1.destroy()
+                                cell_format2 = workbook.add_format()
+                                cell_format2.set_bottom(2)
+                                cell_format2.set_top(2)
+                                cell_format2.set_right(2)
 
-                                    e4.bind("<KP_Enter>", checkewd)
-                                    e4.bind("<Return>", checkewd)
+                                cell_format3 = workbook.add_format()
+                                cell_format3.set_bottom(2)
+                                cell_format3.set_top(2)
+                                cell_format3.set_right(2)
+                                cell_format3.set_left(2)
 
-                                    Button(f3, text="SLPIT", command=checkewd).grid(row=4, column=2, columnspan=2,
-                                                                                    padx=25)
+                                cell_leftright = workbook.add_format()
+                                cell_leftright.set_right(2)
+                                cell_leftright.set_left(2)
 
-                        Button(f4, text="SEARCH", command=checkewq).grid(row=2, column=0, columnspan=2, padx=25)
+                                cell_leftbottom = workbook.add_format()
+                                cell_leftbottom.set_bottom(2)
+                                cell_leftbottom.set_bold(True)
+                                cell_leftbottom.set_left(2)
 
-                    b5.bind('<Button-1>', splitbundlewhilecreatingbill)
+                                cell_rightbottom = workbook.add_format()
+                                cell_rightbottom.set_bottom(2)
+                                cell_rightbottom.set_bold(True)
+                                cell_rightbottom.set_right(2)
 
-                    def mixcheck():
-                        if (var1.get() == 1):
-                            # errorcanoccur
-                            e14.delete(0, END)
-                            tot = float(e12.get()) * float(e10.get())
-                            e14.insert(0, int(tot))
-                            e14.focus()
-                        else:
-                            # errorcanoccur
-                            e14.delete(0, END)
-                            tot = float(e12.get()) * float(e8.get())
-                            e14.insert(0, int(tot))
-                            e14.focus()
+                                cell_bottom = workbook.add_format()
+                                cell_bottom.set_bottom(2)
 
-                    Checkbutton(f4, text="BY KG", variable=var1, command=mixcheck).grid(row=4, column=5, padx=25)
-                    e14.bind("<KP_Enter>", addtobill)
-                    e14.bind("<Return>", addtobill)
-                    Button(f4, text="ADD TO BILL", command=addtobill).grid(row=4, column=6, padx=25)
-                else:
+                                cell_bottom1 = workbook.add_format()
+                                cell_bottom1.set_bottom(2)
+                                cell_bottom1.set_bold(True)
+
+                                cell_right = workbook.add_format()
+                                cell_right.set_right(2)
+
+                                cell_left = workbook.add_format()
+                                cell_left.set_left(2)
+
+                                cell_righttop = workbook.add_format()
+                                cell_righttop.set_right(2)
+                                cell_righttop.set_top(2)
+
+                                cell_lefttop = workbook.add_format()
+                                cell_lefttop.set_left(2)
+                                cell_lefttop.set_top(2)
+
+                                cell_leftrighttop1 = workbook.add_format()
+                                cell_leftrighttop1.set_left(2)
+                                cell_leftrighttop1.set_top(2)
+                                cell_leftrighttop1.set_right(2)
+                                cell_leftrighttop1.set_font_size(20)
+                                cell_leftrighttop1.set_bold(True)
+                                cell_leftrighttop1.set_align('center')
+
+                                cell_leftrighttop = workbook.add_format()
+                                cell_leftrighttop.set_left(2)
+                                cell_leftrighttop.set_top(2)
+                                cell_leftrighttop.set_right(2)
+                                cell_leftrighttop.set_bold(True)
+
+                                cell_top = workbook.add_format()
+                                cell_top.set_top(2)
+                                worksheet.merge_range('A1:G3', "JAI MATA DI", cell_leftrighttop1)
+
+                                worksheet.write(3, 0, "NAME", cell_lefttop)
+                                worksheet.write(3, 1, selec[0], cell_righttop)
+                                worksheet.write(4, 0, "ADD1", cell_left)
+                                worksheet.write(4, 1, selec[1], cell_right)
+                                worksheet.write(5, 0, "ADD2", cell_left)
+                                worksheet.write(5, 1, selec[2], cell_right)
+                                worksheet.write(3, 2, "BILLNO", cell_top)
+                                worksheet.write(3, 4, "", cell_top)
+                                worksheet.write(3, 5, "", cell_top)
+                                worksheet.write(3, 6, "", cell_righttop)
+                                worksheet.write(4, 6, "", cell_right)
+                                worksheet.write(5, 6, "", cell_right)
+
+                                worksheet.write(3, 3, temp[0][1], cell_top)
+                                worksheet.write(4, 2, "MOBILENO")
+                                worksheet.write(4, 3, selec[5])
+                                worksheet.write(5, 2, "DATE")
+                                worksheet.write(5, 3, d[7])
+
+                                num = 6
+                                worksheet.write(num, 0, "BUNDLENO", cell_format3)
+                                worksheet.write(num, 1, "PRODUCT", cell_format)
+                                worksheet.write(num, 2, "SIZE", cell_format2)
+                                worksheet.write(num, 3, "PCS", cell_format2)
+                                worksheet.write(num, 4, "KG", cell_format2)
+                                worksheet.write(num, 5, "RATE", cell_format2)
+                                worksheet.write(num, 6, "TOTAL", cell_format2)
+
+                                worksheet.write(7, 0, "", cell_leftright)
+                                worksheet.write(7, 2, "", cell_right)
+                                worksheet.write(7, 3, "", cell_right)
+                                worksheet.write(7, 4, "", cell_right)
+                                worksheet.write(7, 5, "", cell_right)
+                                worksheet.write(7, 6, "", cell_right)
+                                num = 7
+                                total = []
+                                for i in w:
+                                    num += 1
+                                    worksheet.write(num, 0, i[2], cell_leftright)
+                                    worksheet.write(num, 1, i[3])
+                                    worksheet.write(num, 2, i[4], cell_right)
+                                    worksheet.write(num, 3, i[5], cell_right)
+                                    worksheet.write(num, 4, i[6], cell_right)
+                                    worksheet.write(num, 5, i[8], cell_right)
+                                    worksheet.write(num, 6, i[9], cell_right)
+                                    total.append(int(i[9]))
+                                # worksheet.write(num + 1, 0, "", cell_leftright)
+                                # worksheet.write(num + 1, 2, "", cell_right)
+                                # worksheet.write(num + 1, 3, "", cell_right)
+                                # worksheet.write(num + 1, 4, "", cell_right)
+                                # worksheet.write(num + 1, 5, "", cell_right)
+                                # worksheet.write(num + 1, 6, "", cell_right)
+                                # worksheet.write(num + 2, 0, "", cell_lefttop)
+                                # worksheet.write(num + 2, 3, "", cell_top)
+                                # worksheet.write(num + 2, 4, "", cell_top)
+                                # worksheet.write(num + 2, 5, "TOTAL",cell_top)
+                                # worksheet.write(num + 2, 1, "BALANCE")
+                                # worksheet.write(num + 2,3,selec[7] )
+                                # worksheet.write(num + 3, 1, "NEW")
+                                # worksheet.write(num + 3, 2, f"+ {str(sum(total))}")
+                                # worksheet.write(num + 4, 1, "NEW BALC.")
+                                # worksheet.write(num + 4, 2, f"{ float(selec[7])+(total)}")
+                                #
+                                # worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
+                                # worksheet.write(num + 3, 0, "", cell_left)
+                                # worksheet.write(num + 3, 5, "", cell_top)
+                                # worksheet.write(num + 3, 6, "", cell_top)
+                                # worksheet.write(num + 4, 0, "", cell_left)
+                                # worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
+                                # worksheet.write(num + 5, 1, "", cell_bottom)
+                                # worksheet.write(num + 5, 2, "", cell_bottom)
+                                # worksheet.write(num + 5, 3, "", cell_bottom)
+                                # worksheet.write(num + 5, 4, "", cell_bottom)
+                                # worksheet.write(num + 5, 6, "", cell_rightbottom)
+                                #
+                                # worksheet.write(num + 5, 2, "", cell_rightbottom)
+                                # worksheet.write(num + 3, 6, "", cell_righttop)
+                                # worksheet.write(num + 4, 6, "", cell_right)
+                                # worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
+                                worksheet.write(num + 1, 0, "", cell_leftright)
+                                worksheet.write(num + 1, 2, "", cell_right)
+                                worksheet.write(num + 1, 3, "", cell_right)
+                                worksheet.write(num + 1, 4, "", cell_right)
+                                worksheet.write(num + 1, 5, "", cell_right)
+                                worksheet.write(num + 1, 6, "", cell_right)
+                                worksheet.write(num + 2, 0, "", cell_lefttop)
+                                worksheet.write(num + 2, 1, "", cell_top)
+                                worksheet.write(num + 2, 2, "", cell_righttop)
+                                worksheet.write(num + 2, 3, "", cell_top)
+                                worksheet.write(num + 2, 4, "", cell_top)
+                                worksheet.write(num + 2, 5, "TOTAL", cell_top)
+                                worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
+                                worksheet.write(num + 3, 0, "", cell_left)
+                                worksheet.write(num + 3, 5, "", cell_top)
+                                worksheet.write(num + 3, 6, "", cell_top)
+                                worksheet.write(num + 4, 0, "", cell_left)
+                                worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
+                                worksheet.write(num + 5, 1, "", cell_bottom)
+                                worksheet.write(num + 5, 2, "", cell_bottom)
+                                worksheet.write(num + 5, 3, "", cell_bottom)
+                                worksheet.write(num + 5, 4, "", cell_bottom)
+                                worksheet.write(num + 5, 6, "", cell_rightbottom)
+                                worksheet.write(num + 3, 0, "", cell_left)
+
+                                worksheet.write(num + 3, 1, "", cell_right)
+                                worksheet.write(num + 4, 1, "", cell_right)
+                                worksheet.write(num + 5, 2, "", cell_rightbottom)
+                                worksheet.write(num + 3, 6, "", cell_righttop)
+                                worksheet.write(num + 4, 6, "", cell_right)
+                                worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
+                                print(selec)
+                                worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",
+                                                cell_leftrighttop)
+                                worksheet.write(num + 3, 2,
+                                                f"     NEW                                             + {str(sum(total))}",
+                                                cell_leftright)
+
+                                totka = sum(total)
+
+                                connection = sqlite3.connect('mytables4.db')
+                                conn = connection.cursor()
+                                conn.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                                sele = conn.fetchall()
+                                selecate = list(sele[0])
+                                totalW = float(selecate[7])
+                                newtotal = totalW + totka
+                                worksheet.write(num + 4, 2, f"     NEW BALC.                                 {newtotal}",
+                                                cell_leftrighttop)
+
+                                conn.execute(f"UPDATE custom9 SET TOTAL = '{newtotal}' where NAME='{na}'")
+                                workbook.close()
+
+                                connection.commit()
+                                connection.close()
+
+                                tsmg.showinfo("Saved", "Your bill has been saved successfully")
+
+                                createbill(event)
+                                pass
+                        b4 = Button(f2, text="SAVE BILL")
+                        b4.pack(pady=150)
+                        b4.bind('<Button-1>', savebill)
+
+                        def mixcheck():
+                            if (var1.get() == 1):
+                                # errorcanoccur
+                                e14.delete(0, END)
+                                tot = float(e12.get()) * float(e10.get())
+                                e14.insert(0, int(tot))
+                                e14.focus()
+                            else:
+                                # errorcanoccur
+                                e14.delete(0, END)
+                                tot = float(e12.get()) * float(e8.get())
+                                e14.insert(0, int(tot))
+                                e14.focus()
+
+                        Checkbutton(f4, text="BY KG", variable=var1, command=mixcheck).grid(row=4, column=5, padx=25)
+
+                    except Exception as e:
+                        tsmg.showinfo("info","bundle already exists")
+                        print(e)
+                    pass
+
+                Button(f4, text="SAVE & ADD", command=checkasw).grid(row=4, column=5, columnspan=2, padx=25)
+
+                pass
+            else:
+                connection = sqlite3.connect("mytables4.db")
+                crsr = connection.cursor()
+                crsr.execute(f"SELECT * FROM stockfinal634 WHERE BUNDLE ='{ese.get()}';")
+                w = crsr.fetchall()
+                if (len(w) == 0):
+
                     f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
                     f4.grid(row=1, column=2, sticky="nsew")
+                    Button(f4, text="NOT FOUND").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
+                    pass
 
-                    Button(f4, text="ALREADY SOLD").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
+                else:
+                    d = list(w[0])
+                    connection.close()
+                    if (d[12] != "SOLD"):
+                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
+                        f4.grid(row=1, column=2, sticky="nsew")
+                        l1 = Label(f4, text="Bundle type", width=8)
+                        l1.grid(row=0, column=0, padx=5, pady=5)
+                        e1 = Entry(f4)
+                        e1.grid(row=0, column=1)
+                        l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
+                        l2.grid(row=1, column=0, padx=5, pady=5)
+                        e2 = Entry(f4)
+                        e2.grid(row=1, column=1)
+                        l3 = Label(f4, text="THK REMARK", padx=5, width=8)
+                        l3.grid(row=2, column=0, padx=5, pady=5)
+                        e3 = Entry(f4)
+                        e3.grid(row=2, column=1)
+                        l4 = Label(f4, text="BUNDLE", padx=5, width=8)
+                        l4.grid(row=3, column=0, padx=5, pady=5)
+                        e4 = Entry(f4)
+                        e4.grid(row=3, column=1)
+                        l5 = Label(f4, text="COVER", padx=5, width=8)
+                        l5.grid(row=4, column=0, padx=5, pady=5)
+                        e5 = Entry(f4)
+                        e5.grid(row=4, column=1)
+                        l6 = Label(f4, text="STM", padx=5, width=8)
+                        l6.grid(row=0, column=5, padx=5, pady=5)
+                        e6 = Entry(f4)
+                        e6.grid(row=0, column=6)
+                        l7 = Label(f4, text="R2", padx=5, width=8)
+                        l7.grid(row=0, column=3, padx=20, pady=5)
+                        e7 = Entry(f4)
+                        e7.grid(row=0, column=4)
+                        l8 = Label(f4, text="PCS", padx=5, width=8)
+                        l8.grid(row=1, column=3, padx=5, pady=5)
+                        e8 = Entry(f4)
+                        e8.grid(row=1, column=4)
+                        l9 = Label(f4, text="MM", padx=5, width=8)
+                        l9.grid(row=2, column=3, padx=5, pady=5)
+                        e9 = Entry(f4)
+                        e9.grid(row=2, column=4)
+                        l10 = Label(f4, text="KGS", padx=5, width=8)
+                        l10.grid(row=3, column=3, padx=5, pady=5)
+                        e10 = Entry(f4)
+                        e10.grid(row=3, column=4)
+                        l11 = Label(f4, text="PACKINGNO", padx=5, width=8)
+                        l11.grid(row=4, column=3, padx=5, pady=5)
+                        e11 = Entry(f4)
+                        e11.grid(row=4, column=4)
+                        l14 = Label(f4, text="TOTAL", padx=5, width=8)
+                        l14.grid(row=3, column=5, padx=5, pady=5)
+                        e14 = Entry(f4)
+                        e14.grid(row=3, column=6)
+                        l12 = Label(f4, text="RATE", padx=5, width=8)
+                        l12.grid(row=2, column=5, padx=5, pady=5)
+                        e12 = Entry(f4)
+                        e12.grid(row=2, column=6)
+                        l13 = Label(f4, text="STATUS", padx=5, width=8)
+                        l13.grid(row=1, column=5, padx=20, pady=5)
+                        e13 = Entry(f4)
+                        e13.grid(row=1, column=6, padx=5, pady=5)
+                        e1.insert(0, d[0])
+                        e2.insert(0, d[1])
+                        e3.insert(0, d[2])
+                        e4.insert(0, d[3])
+                        e5.insert(0, d[4])
+                        e6.insert(0, d[5])
+                        e7.insert(0, d[6])
+                        e8.insert(0, d[7])
+                        e9.insert(0, d[8])
+                        e10.insert(0, d[9])
+                        e11.insert(0, d[10])
+                        e13.insert(0, d[12])
+                        e12.focus()
+                        e12.bind("<KP_Enter>", lambda x: e14.focus())
+                        e12.bind("<Return>", lambda x: e14.focus())
+
+                        def addtobill(*args):
+                            nonlocal poplino
+                            nonlocal bunlis
+                            bunlis.remove(d[3])
+                            poplino = 1
+                            r4 = []
+                            r4.append(d[3])
+                            r4.append(d[0])
+                            r4.append(d[1]+d[2] + 'x'+d[8]+'mm')
+                            r4.append(d[7])
+                            r4.append(d[9])
+                            if e12.get() == '':
+                                r4.append('0')
+                            else:
+                                try:
+                                    ew = e12.get()
+                                    eew = float(ew)
+                                    r4.append(int(eew))
+                                except Exception as e:
+                                    print(e)
+                                    r4.append('0')
+                                    tsmg.showinfo("info", "sorry wrong input price")
+
+                            if e14.get() == '':
+                                r4.append('0')
+                            else:
+                                try:
+                                    ew1 = e14.get()
+                                    eew1 = float(ew1)
+                                    r4.append(int(eew1))
+                                except Exception as e:
+                                    r4.append('0')
+                                    tsmg.showinfo("info", "sorry wrong input price")
+                            r5 = []
+
+                            r5 = r4.copy()
+                            r5.insert(0, billno)
+                            if r5 not in billbundlelist:
+                                treev.insert("", 'end', values=r4)
+                                billbundlelist.append(r5)
+                                bnolist.append(d[3])
+                            else:
+                                tsmg.showinfo("info", "bundle no already in the bill")
+                            f4.destroy()
+
+                        b4 = Button(f2, text="SAVE BILL")
+                        b4.pack(pady=150)
+
+                        def savebill(event):
+                            nonlocal poplino
+                            if poplino == 0:
+                                tsmg.showinfo("alert", "no entry")
+                                createbill(event)
+
+                            else:
+                                f2 = Frame(root, background="pink", width=10, height=100, borderwidth=6, relief=SUNKEN)
+                                f2.grid(row=0, column=1, sticky="nsew", rowspan=2)
+
+                                today = date.today()
+                                datetoday = today.strftime("%Y-%m-%d")
+                                bnolist1 = list(set(bnolist))
+                                conn = sqlite3.connect('mytables4.db')
+                                for i in bnolist1:
+                                    conn.execute(f"UPDATE stockfinal634 SET STATUS = 'SOLD' where BUNDLE='{i}'")
+                                    conn.commit()
+                                conn.close()
+                                # now will update bill no
+                                connection = sqlite3.connect('mytables4.db')
+                                conn = connection.cursor()
+                                conn.execute("SELECT * FROM billno9 WHERE NAME = '1'")
+                                temp = conn.fetchall()
+                                tempno = int(temp[0][1])
+                                tempno = tempno + 1
+                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='1'")
+                                connection.commit()
+                                connection = sqlite3.connect("mytables4.db")
+                                cursor = connection.cursor()
+                                for i in billbundlelist:
+                                    i.insert(6, datetoday)
+                                    i.append(sel[0])
+                                    sa = f'''INSERT INTO billstock5 VALUES ('{i[0]}','{i[9]}','{i[1]}','{i[2]}','{i[3]}','{i[4]}','{i[5]}','{i[6]}','{i[7]}','{i[8]}')'''
+                                    cursor.execute(sa)
+                                    connection.commit()
+                                connection.close()
+
+                                file = open('bill_location.txt', 'r')
+                                for e in file:
+                                    mainloc = e
+                                workbook = xlsxwriter.Workbook(f'{mainloc}{billbundlelist[0][0]}.xlsx')
+                                worksheet = workbook.add_worksheet()
+
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO = '{billbundlelist[0][0]}'")
+                                w = crsr.fetchall()
+                                connection.close()
+                                d = list(w[0])
+                                na = d[1]
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                                selec = crsr.fetchall()
+                                connection.close()
+                                selec = list(selec[0])
+                                worksheet.set_column('A:A', 10)
+                                worksheet.set_column('B:B', 30)
+                                worksheet.set_column('C:C', 40)
+
+
+                                cell_format = workbook.add_format()
+                                cell_format.set_bottom(2)
+                                cell_format.set_top(2)
+
+                                cell_format2 = workbook.add_format()
+                                cell_format2.set_bottom(2)
+                                cell_format2.set_top(2)
+                                cell_format2.set_right(2)
+
+                                cell_format3 = workbook.add_format()
+                                cell_format3.set_bottom(2)
+                                cell_format3.set_top(2)
+                                cell_format3.set_right(2)
+                                cell_format3.set_left(2)
+
+                                cell_leftright = workbook.add_format()
+                                cell_leftright.set_right(2)
+                                cell_leftright.set_left(2)
+
+                                cell_leftbottom = workbook.add_format()
+                                cell_leftbottom.set_bottom(2)
+                                cell_leftbottom.set_bold(True)
+                                cell_leftbottom.set_left(2)
+
+                                cell_rightbottom = workbook.add_format()
+                                cell_rightbottom.set_bottom(2)
+                                cell_rightbottom.set_bold(True)
+                                cell_rightbottom.set_right(2)
+
+                                cell_bottom = workbook.add_format()
+                                cell_bottom.set_bottom(2)
+
+                                cell_bottom1 = workbook.add_format()
+                                cell_bottom1.set_bottom(2)
+                                cell_bottom1.set_bold(True)
+
+                                cell_right = workbook.add_format()
+                                cell_right.set_right(2)
+
+                                cell_left = workbook.add_format()
+                                cell_left.set_left(2)
+
+                                cell_righttop = workbook.add_format()
+                                cell_righttop.set_right(2)
+                                cell_righttop.set_top(2)
+
+                                cell_lefttop = workbook.add_format()
+                                cell_lefttop.set_left(2)
+                                cell_lefttop.set_top(2)
+
+                                cell_leftrighttop1 = workbook.add_format()
+                                cell_leftrighttop1.set_left(2)
+                                cell_leftrighttop1.set_top(2)
+                                cell_leftrighttop1.set_right(2)
+                                cell_leftrighttop1.set_font_size(20)
+                                cell_leftrighttop1.set_bold(True)
+                                cell_leftrighttop1.set_align('center')
+
+                                cell_leftrighttop = workbook.add_format()
+                                cell_leftrighttop.set_left(2)
+                                cell_leftrighttop.set_top(2)
+                                cell_leftrighttop.set_right(2)
+                                cell_leftrighttop.set_bold(True)
+
+                                cell_top = workbook.add_format()
+                                cell_top.set_top(2)
+                                worksheet.merge_range('A1:G3', "JAI MATA DI", cell_leftrighttop1)
+
+                                worksheet.write(3, 0, "NAME", cell_lefttop)
+                                worksheet.write(3, 1, selec[0], cell_righttop)
+                                worksheet.write(4, 0, "ADD1", cell_left)
+                                worksheet.write(4, 1, selec[1], cell_right)
+                                worksheet.write(5, 0, "ADD2", cell_left)
+                                worksheet.write(5, 1, selec[2], cell_right)
+                                worksheet.write(3, 2, "BILLNO", cell_top)
+                                worksheet.write(3, 4, "", cell_top)
+                                worksheet.write(3, 5, "", cell_top)
+                                worksheet.write(3, 6, "", cell_righttop)
+                                worksheet.write(4, 6, "", cell_right)
+                                worksheet.write(5, 6, "", cell_right)
+
+                                worksheet.write(3, 3, temp[0][1], cell_top)
+                                worksheet.write(4, 2, "MOBILENO")
+                                worksheet.write(4, 3, selec[5])
+                                worksheet.write(5, 2, "DATE")
+                                worksheet.write(5, 3, d[7])
+
+                                num = 6
+                                worksheet.write(num, 0, "BUNDLENO", cell_format3)
+                                worksheet.write(num, 1, "PRODUCT", cell_format)
+                                worksheet.write(num, 2, "SIZE", cell_format2)
+                                worksheet.write(num, 3, "PCS", cell_format2)
+                                worksheet.write(num, 4, "KG", cell_format2)
+                                worksheet.write(num, 5, "RATE", cell_format2)
+                                worksheet.write(num, 6, "TOTAL", cell_format2)
+
+                                worksheet.write(7, 0, "", cell_leftright)
+                                worksheet.write(7, 2, "", cell_right)
+                                worksheet.write(7, 3, "", cell_right)
+                                worksheet.write(7, 4, "", cell_right)
+                                worksheet.write(7, 5, "", cell_right)
+                                worksheet.write(7, 6, "", cell_right)
+                                num = 7
+                                total = []
+                                for i in w:
+                                    num += 1
+                                    worksheet.write(num, 0, i[2], cell_leftright)
+                                    worksheet.write(num, 1, i[3])
+                                    worksheet.write(num, 2, i[4], cell_right)
+                                    worksheet.write(num, 3, i[5], cell_right)
+                                    worksheet.write(num, 4, i[6], cell_right)
+                                    worksheet.write(num, 5, i[8], cell_right)
+                                    worksheet.write(num, 6, i[9], cell_right)
+                                    total.append(int(i[9]))
+                                # worksheet.write(num + 1, 0, "", cell_leftright)
+                                # worksheet.write(num + 1, 2, "", cell_right)
+                                # worksheet.write(num + 1, 3, "", cell_right)
+                                # worksheet.write(num + 1, 4, "", cell_right)
+                                # worksheet.write(num + 1, 5, "", cell_right)
+                                # worksheet.write(num + 1, 6, "", cell_right)
+                                # worksheet.write(num + 2, 0, "", cell_lefttop)
+                                # worksheet.write(num + 2, 3, "", cell_top)
+                                # worksheet.write(num + 2, 4, "", cell_top)
+                                # worksheet.write(num + 2, 5, "TOTAL",cell_top)
+                                # worksheet.write(num + 2, 1, "BALANCE")
+                                # worksheet.write(num + 2,3,selec[7] )
+                                # worksheet.write(num + 3, 1, "NEW")
+                                # worksheet.write(num + 3, 2, f"+ {str(sum(total))}")
+                                # worksheet.write(num + 4, 1, "NEW BALC.")
+                                # worksheet.write(num + 4, 2, f"{ float(selec[7])+(total)}")
+                                #
+                                # worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
+                                # worksheet.write(num + 3, 0, "", cell_left)
+                                # worksheet.write(num + 3, 5, "", cell_top)
+                                # worksheet.write(num + 3, 6, "", cell_top)
+                                # worksheet.write(num + 4, 0, "", cell_left)
+                                # worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
+                                # worksheet.write(num + 5, 1, "", cell_bottom)
+                                # worksheet.write(num + 5, 2, "", cell_bottom)
+                                # worksheet.write(num + 5, 3, "", cell_bottom)
+                                # worksheet.write(num + 5, 4, "", cell_bottom)
+                                # worksheet.write(num + 5, 6, "", cell_rightbottom)
+                                #
+                                # worksheet.write(num + 5, 2, "", cell_rightbottom)
+                                # worksheet.write(num + 3, 6, "", cell_righttop)
+                                # worksheet.write(num + 4, 6, "", cell_right)
+                                # worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
+                                worksheet.write(num + 1, 0, "", cell_leftright)
+                                worksheet.write(num + 1, 2, "", cell_right)
+                                worksheet.write(num + 1, 3, "", cell_right)
+                                worksheet.write(num + 1, 4, "", cell_right)
+                                worksheet.write(num + 1, 5, "", cell_right)
+                                worksheet.write(num + 1, 6, "", cell_right)
+                                worksheet.write(num + 2, 0, "", cell_lefttop)
+                                worksheet.write(num + 2, 1, "", cell_top)
+                                worksheet.write(num + 2, 2, "", cell_righttop)
+                                worksheet.write(num + 2, 3, "", cell_top)
+                                worksheet.write(num + 2, 4, "", cell_top)
+                                worksheet.write(num + 2, 5, "TOTAL", cell_top)
+                                worksheet.write(num + 2, 6, str(sum(total)), cell_righttop)
+                                worksheet.write(num + 3, 0, "", cell_left)
+                                worksheet.write(num + 3, 5, "", cell_top)
+                                worksheet.write(num + 3, 6, "", cell_top)
+                                worksheet.write(num + 4, 0, "", cell_left)
+                                worksheet.write(num + 5, 0, "RECIVER SIGNATURE", cell_leftbottom)
+                                worksheet.write(num + 5, 1, "", cell_bottom)
+                                worksheet.write(num + 5, 2, "", cell_bottom)
+                                worksheet.write(num + 5, 3, "", cell_bottom)
+                                worksheet.write(num + 5, 4, "", cell_bottom)
+                                worksheet.write(num + 5, 6, "", cell_rightbottom)
+                                worksheet.write(num + 3, 0, "", cell_left)
+
+                                worksheet.write(num + 3, 1, "", cell_right)
+                                worksheet.write(num + 4, 1, "", cell_right)
+                                worksheet.write(num + 5, 2, "", cell_rightbottom)
+                                worksheet.write(num + 3, 6, "", cell_righttop)
+                                worksheet.write(num + 4, 6, "", cell_right)
+                                worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
+                                print(selec)
+                                worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",cell_leftrighttop)
+                                worksheet.write(num + 3, 2,f"     NEW                                             + {str(sum(total))}",cell_leftright)
+
+                                totka = sum(total)
+
+                                connection = sqlite3.connect('mytables4.db')
+                                conn = connection.cursor()
+                                conn.execute(f"SELECT * FROM custom9 WHERE NAME = '{na}'")
+                                sele = conn.fetchall()
+                                selecate = list(sele[0])
+                                totalW = float(selecate[7])
+                                newtotal = totalW + totka
+                                worksheet.write(num + 4, 2,f"     NEW BALC.                                 {newtotal}",cell_leftrighttop)
+
+                                conn.execute(f"UPDATE custom9 SET TOTAL = '{newtotal}' where NAME='{na}'")
+                                workbook.close()
+
+                                connection.commit()
+                                connection.close()
+
+                                tsmg.showinfo("Saved", "Your bill has been saved successfully")
+
+                                createbill(event)
+                                pass
+
+                        b4.bind('<Button-1>', savebill)
+                        var1 = IntVar()
+
+                        b5 = Button(f2, text="SPLIT BUNDLE")
+                        b5.pack(pady=20)
+
+                        def splitbundlewhilecreatingbill(event):
+                            t1 = Toplevel()
+                            t1.title("Split Bundle")
+                            t1.minsize(500, 500)
+                            f3 = Frame(t1, background="bisque", borderwidth=6, relief=SUNKEN)
+                            f3.grid(row=0, rowspan=2, column=0, sticky="nsew")
+                            f4 = Frame(t1, background="pink", borderwidth=6, relief=SUNKEN)
+                            f4.grid(row=2, column=0, sticky="nsew")
+                            t1.grid_columnconfigure(0)
+                            t1.grid_rowconfigure(0, weight=2)
+                            t1.grid_rowconfigure(1, weight=2)
+                            t1.grid_rowconfigure(2, weight=3)
+                            l1 = Label(f4, text="BUNDLE NUMBER YOU WANT TO SPLIT")
+                            l1.grid(row=0, column=0, padx=5, pady=5)
+                            e = Entry(f4)
+                            e.grid(row=0, column=1)
+                            e.focus()
+
+                            def checkewq():
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"SELECT * FROM stockfinal634 WHERE BUNDLE ='{e.get()}';")
+                                w = crsr.fetchall()
+                                if (len(w) == 0):
+                                    tsmg.showinfo("Warning", "NOT IN STOCK")
+                                    pass
+
+                                else:
+                                    d = list(w[0])
+                                    connection.close()
+                                    if (d[12] == "SOLD"):
+                                        tsmg.showinfo("Warning", "ALREADY SOLD")
+                                    else:
+                                        f4 = Frame(t1, background="pink", width=100, height=15, borderwidth=6,
+                                                   relief=SUNKEN)
+                                        f4.grid(row=2, column=0, sticky="nsew")
+                                        strdat = str(d)
+                                        Label(f4, text=strdat).grid()
+
+                                        Label(f3, text=f"{d[3]}A").grid(row=1, column=0, columnspan=2, padx=10)
+                                        Label(f3, text=f"{d[3]}B").grid(row=1, column=2, columnspan=2, padx=10)
+                                        Label(f3, text="PCS").grid(row=2, column=0, padx=10, pady=15)
+                                        e1 = Entry(f3)
+                                        e1.grid(row=2, column=1)
+                                        Label(f3, text="PCS").grid(row=2, column=2, padx=10, pady=15)
+                                        e2 = Entry(f3)
+                                        e2.grid(row=2, column=3)
+                                        Label(f3, text="KGS").grid(row=3, column=0, padx=10, pady=15)
+                                        e3 = Entry(f3)
+                                        e3.grid(row=3, column=1)
+                                        Label(f3, text="KGS").grid(row=3, column=2, padx=10, pady=15)
+                                        e4 = Entry(f3)
+                                        e4.grid(row=3, column=3)
+                                        e1.focus()
+                                        # deleteifwanttodelete
+                                        e1.bind("<KP_Enter>", lambda x: e2.focus())
+                                        e1.bind("<Return>", lambda x: e2.focus())
+                                        e2.bind("<KP_Enter>", lambda x: e3.focus())
+                                        e2.bind("<Return>", lambda x: e3.focus())
+                                        e3.bind("<KP_Enter>", lambda x: e4.focus())
+                                        e3.bind("<Return>", lambda x: e4.focus())
+
+                                        def checkewd(*args):
+
+                                            d1a = d.copy()
+                                            d1b = d.copy()
+                                            d1a[3] = f"{d[3]}A"
+                                            d1b[3] = f"{d[3]}B"
+                                            d1a[7] = e1.get()
+                                            d1b[7] = e2.get()
+                                            d1a[9] = e3.get()
+                                            d1b[9] = e4.get()
+                                            d1a[12] = "SPLIT"
+                                            d1b[12] = "SPLIT"
+                                            connection = sqlite3.connect("mytables4.db")
+                                            cursor = connection.cursor()
+                                            row = d1a
+                                            sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
+                                            cursor.execute(sa)
+                                            connection.commit()
+                                            row = d1b
+                                            sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
+                                            cursor.execute(sa)
+                                            connection.commit()
+                                            connection.close()
+                                            connection = sqlite3.connect("mytables4.db")
+                                            crsr = connection.cursor()
+                                            crsr.execute(f"DELETE FROM stockfinal634 WHERE BUNDLE ='{e.get()}';")
+                                            connection.commit()
+                                            connection.close()
+                                            tsmg.showinfo("completed", "Bundle Splited")
+                                            nonlocal bunlis
+                                            bunlis.append(f"{d[3]}A")
+                                            bunlis.append(f"{d[3]}B")
+                                            bunlis.remove(d[3])
+
+                                            t1.destroy()
+
+                                        e4.bind("<KP_Enter>", checkewd)
+                                        e4.bind("<Return>", checkewd)
+
+                                        Button(f3, text="SLPIT", command=checkewd).grid(row=4, column=2, columnspan=2,
+                                                                                        padx=25)
+
+                            Button(f4, text="SEARCH", command=checkewq).grid(row=2, column=0, columnspan=2, padx=25)
+
+                        b5.bind('<Button-1>', splitbundlewhilecreatingbill)
+
+                        def mixcheck():
+                            if (var1.get() == 1):
+                                # errorcanoccur
+                                e14.delete(0, END)
+                                tot = float(e12.get()) * float(e10.get())
+                                e14.insert(0, int(tot))
+                                e14.focus()
+                            else:
+                                # errorcanoccur
+                                e14.delete(0, END)
+                                tot = float(e12.get()) * float(e8.get())
+                                e14.insert(0, int(tot))
+                                e14.focus()
+
+                        Checkbutton(f4, text="BY KG", variable=var1, command=mixcheck).grid(row=4, column=5, padx=25)
+                        e14.bind("<KP_Enter>", addtobill)
+                        e14.bind("<Return>", addtobill)
+                        Button(f4, text="ADD TO BILL", command=addtobill).grid(row=4, column=6, padx=25)
+                    else:
+                        f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
+                        f4.grid(row=1, column=2, sticky="nsew")
+
+                        Button(f4, text="ALREADY SOLD").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
 
             pass
 
@@ -5472,7 +5974,7 @@ def changepldate(eve):
     pass
 
 root.bind("<F3>",changepldate)
-
+root.bind("<F4>",showmax)
 root.bind("<F2>",changedate)
 root.mainloop()
 
