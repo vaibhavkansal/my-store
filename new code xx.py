@@ -4455,7 +4455,7 @@ def updatebill1(event):
                     e2 = Entry(t1)
                     e2.grid(row=1, column=1)
                     e1.insert(0,'0')
-                    e2.insert(0, '0')
+                    e2.insert(0,'0')
                     def setrate():
                         try:
                             qwaszx=int(e1.get())
@@ -4701,8 +4701,12 @@ def updatebill1(event):
                                 sele = conn.fetchall()
                                 selecate = list(sele[0])
                                 tot = float(selecate[7])
-                                new_tot=tot + int(i[8])
-                                conn.execute(f"UPDATE custom9 SET TOTAL = '{new_tot}' where NAME='{na}'")
+                                new_tot=tot + int(i[9])
+                                connection.close()
+
+                                connection = sqlite3.connect("mytables4.db")
+                                crsr = connection.cursor()
+                                crsr.execute(f"UPDATE custom9 SET TOTAL = '{new_tot}' where NAME='{na}'")
                                 connection.commit()
                                 connection.close()
                                 connection.close()
@@ -4741,11 +4745,10 @@ def updatebill1(event):
                 e.bind("<Return>", keyup)
                 Button(f4, text="SEARCH", command=check).grid(row=2, column=0, columnspan=2, padx=25)
 
-            Button(f4, text="ADD BUNDLE", command=addbundlea).grid(row=1, column=6, columnspan=2, padx=150)
+            Button(f4, text="ADD BUNDLE", command=addbundlea).grid(row=1, column=5, columnspan=2, padx=150)
 
         else:
             tsmg.showinfo("Sorry", "Can't update cancelled bill ! ")
-            addbundle(event)
     def upbill():
         e1get=e1.get()
         f3.destroy()
