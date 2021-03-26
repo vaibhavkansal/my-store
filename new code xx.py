@@ -1278,6 +1278,11 @@ def addpacking(event):
                 i.append(plno)
                 i.append(pldate)
                 status = "INSTOCK"
+                try:
+                    qwa = int(i[7])
+                except Exception as e:
+                    i[7] = i[8]
+                    i[8] = ''
                 i.append(status)
             showstocksbeforesaving(d)
         else:
@@ -1677,6 +1682,11 @@ def addpacking(event):
                 status = "INSTOCK"
                 i.append(status)
             for i in d:
+                try:
+                    qwa = int(i[7])
+                except Exception as e:
+                    i[7] = i[8]
+                    i[8] = ''
                 dfortwopages.append(i)
             showstocksbeforesaving(dfortwopages)
     except Exception as e:
@@ -1878,6 +1888,11 @@ def addpacking(event):
                 i.append(plno)
                 i.append(pldate)
                 status = "INSTOCK"
+                try:
+                    qwa = int(i[7])
+                except Exception as e:
+                    i[7] = i[8]
+                    i[8] = ''
                 i.append(status)
             showstocksbeforesaving(d)
 
@@ -4255,7 +4270,7 @@ def exportbill1(event):
             worksheet.write(num + 3, 6, "", cell_righttop)
             worksheet.write(num + 4, 6, "", cell_right)
             worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-            print(sel)
+
 
             worksheet.write(num + 2, 2, f"                               ",cell_leftrighttop)
             worksheet.write(num + 3, 2, f"    ",cell_leftright)
@@ -4412,7 +4427,6 @@ def updatebill1(event):
                 if lengthofde != 1:
                     a= treev1.item(item,'values')
                     a=list(a)
-                    print(a)
                     connection = sqlite3.connect("mytables4.db")
                     cursor = connection.cursor()
                     sa = f'''DELETE FROM billstock5 WHERE BUNDLENO = '{a[0]}' AND PRODUCT ='{a[1]}' AND SIZE = '{a[2]}' AND PCS = '{a[3]}' AND KG = '{a[4]}';'''
@@ -4440,7 +4454,7 @@ def updatebill1(event):
                 if item:
                     a = treev1.item(item, 'values')
                     a = list(a)
-                    print(a)
+
                     connection = sqlite3.connect("mytables4.db")
                     cursor = connection.cursor()
                     t1 = Toplevel(background="bisque")
@@ -4850,9 +4864,12 @@ def createbill1(event):
             return
 
         # we will fatch bundle no now
+        datefor = date.today()
+        year = datefor.strftime("%Y")
+
         connection = sqlite3.connect("mytables4.db")
         crsr = connection.cursor()
-        crsr.execute(f"SELECT * FROM billno9")
+        crsr.execute(f"SELECT * FROM billno9 WHERE NAME = '{year}'")
         w = crsr.fetchall()
         connection.close()
         wai = list(w[0])
@@ -5083,11 +5100,11 @@ def createbill1(event):
                                 # now will update bill no
                                 connection = sqlite3.connect('mytables4.db')
                                 conn = connection.cursor()
-                                conn.execute("SELECT * FROM billno9 WHERE NAME = '1'")
+                                conn.execute(f"SELECT * FROM billno9 WHERE NAME = '{year}'")
                                 temp = conn.fetchall()
                                 tempno = int(temp[0][1])
                                 tempno = tempno + 1
-                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='1'")
+                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='{year}'")
                                 connection.commit()
                                 connection = sqlite3.connect("mytables4.db")
                                 cursor = connection.cursor()
@@ -5300,7 +5317,6 @@ def createbill1(event):
                                 worksheet.write(num + 3, 6, "", cell_righttop)
                                 worksheet.write(num + 4, 6, "", cell_right)
                                 worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                                print(selec)
                                 worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",
                                                 cell_leftrighttop)
                                 worksheet.write(num + 3, 2,
@@ -5516,11 +5532,11 @@ def createbill1(event):
                                 # now will update bill no
                                 connection = sqlite3.connect('mytables4.db')
                                 conn = connection.cursor()
-                                conn.execute("SELECT * FROM billno9 WHERE NAME = '1'")
+                                conn.execute(f"SELECT * FROM billno9 WHERE NAME = '{year}'")
                                 temp = conn.fetchall()
                                 tempno = int(temp[0][1])
                                 tempno = tempno + 1
-                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='1'")
+                                conn.execute(f"UPDATE billno9 SET BILLNO = '{tempno}' where NAME='{year}'")
                                 connection.commit()
                                 connection = sqlite3.connect("mytables4.db")
                                 cursor = connection.cursor()
@@ -5734,7 +5750,6 @@ def createbill1(event):
                                 worksheet.write(num + 3, 6, "", cell_righttop)
                                 worksheet.write(num + 4, 6, "", cell_right)
                                 worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                                print(selec)
                                 worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",cell_leftrighttop)
                                 worksheet.write(num + 3, 2,f"     NEW                                             + {str(sum(total))}",cell_leftright)
 
@@ -6042,7 +6057,37 @@ try:
     createbillnotable(billtablename)
     connection = sqlite3.connect("mytables4.db")
     cursor = connection.cursor()
-    sa = f'''INSERT INTO billno9 VALUES ('1','1')'''
+    sa = f'''INSERT INTO billno9 VALUES ('2020','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2021','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2022','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2023','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2024','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2025','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2026','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2027','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2028','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2029','1')'''
+    cursor.execute(sa)
+    connection.commit()
+    sa = f'''INSERT INTO billno9 VALUES ('2030','1')'''
     cursor.execute(sa)
     connection.commit()
     tsmg.showinfo("Setup", "Create a folder where you want to save bill")

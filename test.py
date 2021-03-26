@@ -1,23 +1,28 @@
-import sqlite3
-def createtable(tablename):
-    connection = sqlite3.connect("mytables4.db")
-    cursor = connection.cursor()
-    sqlcommand = f"""CREATE TABLE {tablename}(
-        Type VARCHAR(40),
-        DATE DATE,
-        STATUS VARCHAR(30));"""
-    cursor.execute(sqlcommand)
-    connection.commit()
-    connection.close()
-#createtable('qwea')
-connection = sqlite3.connect("mytables4.db")
-crsr = connection.cursor()
-sa = f'''INSERT INTO qwea VALUES ('rtaqa','','es')'''
-crsr.execute(sa)
-connection.commit()
-crsr.execute(f"SELECT * FROM qwea")
-sele=crsr.fetchall()
-print(sele)
-crsr.execute(f"SELECT * FROM qwea WHERE DATE < '2013-01-17' AND DATE > '2009-1-17'")
-sele=crsr.fetchall()
-print(sele)
+import tkinter
+from tkinter import *
+
+root = Tk()
+
+L = Label(root, text="Right-click to display menu",
+          width=40, height=20)
+L.pack()
+
+m = Menu(root, tearoff=0)
+m.add_command(label="Cut")
+m.add_command(label="Copy")
+m.add_command(label="Paste")
+m.add_command(label="Reload")
+m.add_separator()
+m.add_command(label="Rename")
+
+
+def do_popup(event):
+    try:
+        m.tk_popup(event.x, event.y)
+    finally:
+        m.grab_release()
+
+
+L.bind("<Button-2>", do_popup)
+
+mainloop()
