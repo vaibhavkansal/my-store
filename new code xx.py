@@ -14,7 +14,6 @@ root = Tk()
 root.minsize(1200, 680)
 import tkinter as tk
 
-
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.maxsize(screen_width, screen_height)
@@ -47,6 +46,7 @@ root.grid_columnconfigure(2, weight=10)
 root.grid_rowconfigure(0, weight=3)
 root.grid_rowconfigure(1, weight=1)
 
+
 def createtable(tablename):
     connection = sqlite3.connect("mytables4.db")
     cursor = connection.cursor()
@@ -69,13 +69,15 @@ def createtable(tablename):
     connection.close()
 
     pass
+
+
 def showmax(eve):
     connection = sqlite3.connect("mytables4.db")
     crsr = connection.cursor()
     crsr.execute(f"SELECT BUNDLE FROM stockfinal634")
     w = crsr.fetchall()
     connection.close()
-    k=[]
+    k = []
     q = []
     ep = []
     for i in w:
@@ -83,20 +85,20 @@ def showmax(eve):
             q.append(i[0])
         elif 'EP-' in i[0] or 'ep-' in i[0]:
             ep.append(i[0])
-    j=[]
+    j = []
     for i in q:
-        i=i.split('-')
-        i=i[1]
+        i = i.split('-')
+        i = i[1]
         j.append(int(i))
-    we=max(j)
-    we= 'R-'+str(we)
-    j=[]
+    we = max(j)
+    we = 'R-' + str(we)
+    j = []
     for i in ep:
         i = i.split('-')
         i = i[1]
         j.append(int(i))
-    ew= max(j)
-    ew = 'EP-'+str(ew)
+    ew = max(j)
+    ew = 'EP-' + str(ew)
     t1 = Toplevel(background="bisque")
     t1.title("RECORD")
     t1.minsize(250, 150)
@@ -109,9 +111,8 @@ def showmax(eve):
     l2.grid(row=1, column=0, padx=5, pady=5)
     e2 = Entry(t1)
     e2.grid(row=1, column=1)
-    e1.insert(0,we)
-    e2.insert(0,ew)
-
+    e1.insert(0, we)
+    e2.insert(0, ew)
 
 
 def addbundle1(event):
@@ -130,7 +131,7 @@ def addbundle1(event):
     bunlis = []
     for i in w:
         bunlis.append(i[0])
-    bunlis=list(set(bunlis))
+    bunlis = list(set(bunlis))
 
     def check(*args):
         d.append(e1.get())
@@ -145,16 +146,16 @@ def addbundle1(event):
         d.append(e10.get())
         d.append(e11.get())
 
-        as1=e12.get()
-        if as1.count('-')==2 and as1.index('-')==2 and as1.index('-',3) == 5 and len(as1)==10:
-            date1=as1.split('-')
+        as1 = e12.get()
+        if as1.count('-') == 2 and as1.index('-') == 2 and as1.index('-', 3) == 5 and len(as1) == 10:
+            date1 = as1.split('-')
             date1.reverse()
-            date2="-".join(date1)
+            date2 = "-".join(date1)
             d.append(date2)
-        elif as1.count('-')==2 and as1.index('-')==4 and as1.index('-',5) == 7 and len(as1)==10:
+        elif as1.count('-') == 2 and as1.index('-') == 4 and as1.index('-', 5) == 7 and len(as1) == 10:
             d.append(as1)
         else:
-            tsmg.showinfo("FORMAT","Wrong date format")
+            tsmg.showinfo("FORMAT", "Wrong date format")
             return
         d.append(e13.get())
 
@@ -182,10 +183,9 @@ def addbundle1(event):
 
         # now i need to store data in sql
 
-
     l1 = Label(f4, text="Bundle type", width=8)
     l1.grid(row=0, column=0, padx=5, pady=5)
-    e1 = ttk.Combobox(f4, values=bunlis,height=8,width=32)
+    e1 = ttk.Combobox(f4, values=bunlis, height=8, width=32)
     e1.grid(row=0, column=1)
     l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
     l2.grid(row=1, column=0, padx=5, pady=5)
@@ -271,12 +271,12 @@ def addbundle1(event):
                 checklist.append(i)
         e1["values"] = checklist
 
-
     e1.bind("<KeyRelease>", keydown)
 
     def keyup(event):
         e1.event_generate("<Down>")
-    e1.bind("<KP_Enter>",keyup)
+
+    e1.bind("<KP_Enter>", keyup)
     e1.bind("<Return>", keyup)
 
     e12.bind("<KP_Enter>", check)
@@ -286,10 +286,12 @@ def addbundle1(event):
 
     pass
 
+
 def addbundle(event):
     f3.destroy()
     f4.destroy()
     addbundle1(event)
+
 
 def showstock1(events):
     connection = sqlite3.connect("mytables4.db")
@@ -362,10 +364,10 @@ def showstock1(events):
         pass
 
         pass
+
     def showsoldstock():
         f3.destroy()
         showsoldstock1()
-
 
     def showinstock1():
         global f3
@@ -425,6 +427,7 @@ def showstock1(events):
         pass
 
         pass
+
     def showinstock():
         f3.destroy()
         showinstock1()
@@ -619,7 +622,6 @@ def showstock1(events):
                 f4.destroy()
                 searchbundlenametype1(event)
 
-
             b1.bind("<Button-1>", searchbundlenametype)
 
             def updateduringchecking():
@@ -739,10 +741,12 @@ def showstock1(events):
 
     pass
 
+
 def showstock(events):
     f3.destroy()
     f4.destroy()
     showstock1(events)
+
 
 def addpackingmanual1():
     global f3
@@ -804,8 +808,8 @@ def addpackingmanual1():
     l22.grid(row=2, column=0, padx=5, pady=5)
     e22 = Entry(f2)
     e22.grid(row=3, column=0)
-    e12.insert(0,datee)
-    e22.insert(0,pll)
+    e12.insert(0, datee)
+    e22.insert(0, pll)
     connection = sqlite3.connect("mytables4.db")
     crsr = connection.cursor()
     crsr.execute(f"SELECT * FROM stockfinal634")
@@ -815,6 +819,7 @@ def addpackingmanual1():
     for i in w:
         bunlis.append(i[0])
     bunlis = list(set(bunlis))
+
     def check(*args):
         d = []
         d.append(e1.get())
@@ -840,16 +845,16 @@ def addpackingmanual1():
             cursor.execute(sa)
             connection.commit()
             tsmg.showinfo("Saved", "your entry has been saved")
-            e1.delete(0,'end')
-            e2.delete(0,'end')
-            e3.delete(0,'end')
-            e4.delete(0,'end')
-            e5.delete(0,'end')
-            e6.delete(0,'end')
-            e7.delete(0,'end')
-            e8.delete(0,'end')
-            e9.delete(0,'end')
-            e10.delete(0,'end')
+            e1.delete(0, 'end')
+            e2.delete(0, 'end')
+            e3.delete(0, 'end')
+            e4.delete(0, 'end')
+            e5.delete(0, 'end')
+            e6.delete(0, 'end')
+            e7.delete(0, 'end')
+            e8.delete(0, 'end')
+            e9.delete(0, 'end')
+            e10.delete(0, 'end')
             treev.insert("", 'end', values=d)
 
             # errorcanoccur
@@ -863,10 +868,9 @@ def addpackingmanual1():
 
         # now i need to store data in sql
 
-
     l1 = Label(f4, text="Bundle type", width=8)
     l1.grid(row=0, column=0, padx=5, pady=5)
-    e1 = ttk.Combobox(f4, values=bunlis, height=8,width=31)
+    e1 = ttk.Combobox(f4, values=bunlis, height=8, width=31)
     e1.grid(row=0, column=1)
     l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
     l2.grid(row=1, column=0, padx=5, pady=5)
@@ -908,17 +912,17 @@ def addpackingmanual1():
     l11.grid(row=4, column=3, padx=5, pady=5)
     e11 = Entry(f4)
     e11.grid(row=4, column=4)
-    e11.insert(0,pll)
+    e11.insert(0, pll)
     l12 = Label(f4, text="DATE ", padx=5, width=8)
     l12.grid(row=3, column=5, padx=5, pady=5)
     e12 = Entry(f4)
     e12.grid(row=3, column=6)
-    e12.insert(0,datee)
+    e12.insert(0, datee)
     l13 = Label(f4, text="STATUS", padx=5, width=8)
     l13.grid(row=1, column=5, padx=20, pady=5)
     e13 = Entry(f4)
     e13.grid(row=1, column=6, padx=5, pady=5)
-    e13.insert(0,"INSTOCK")
+    e13.insert(0, "INSTOCK")
     e1.focus()
     # deleteifwanttodelete
     e1.bind("<KP_Enter>", lambda x: e2.focus())
@@ -976,6 +980,7 @@ def addpackingmanual(event):
     f3.destroy()
     f4.destroy()
     addpackingmanual1()
+
 
 def showstocksbeforesaving1(d):
     global f3
@@ -1038,13 +1043,14 @@ def showstocksbeforesaving1(d):
 
     def savebutton(d):
         b1 = Button(f4, text="save data")
+
         def insertintotable(e):
             # tablename="stockfinal634"
             # createtable(tablename)
             # here d is the 2d array of excel
             connection = sqlite3.connect("mytables4.db")
             cursor = connection.cursor()
-            te=0
+            te = 0
             for row in d:
                 sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
                 try:
@@ -1054,9 +1060,9 @@ def showstocksbeforesaving1(d):
                 except Exception as e:
                     print(e)
                     tsmg.showinfo("Failed", f"Packing list already exist\n {e}")
-                    te=1
+                    te = 1
                     break
-            if(te==0):
+            if (te == 0):
                 tsmg.showinfo("success", f"Packing list saved")
 
             connection.close()
@@ -1065,20 +1071,23 @@ def showstocksbeforesaving1(d):
         b1.bind('<Button-1>', insertintotable)
         b1.pack()
         pass
+
     savebutton(d)
     pass
+
 
 def showstocksbeforesaving(d):
     f3.destroy()
     f4.destroy()
     showstocksbeforesaving1(d)
 
+
 def addpacking(event):
     loc = filedialog.askopenfilename()
     po = open(loc, 'rb')
     pr = PyPDF2.PdfFileReader(po)
     noofpages = pr.getNumPages()
-    asqwa=True
+    asqwa = True
     try:
         if (noofpages == 1):
             pob = pr.getPage(0)
@@ -1690,7 +1699,7 @@ def addpacking(event):
                 dfortwopages.append(i)
             showstocksbeforesaving(dfortwopages)
     except Exception as e:
-        if (asqwa==True):
+        if (asqwa == True):
             pob = pr.getPage(0)
             f = pob.extractText()
             d = f.split('\n')
@@ -1898,6 +1907,7 @@ def addpacking(event):
 
     pass
 
+
 def importfromexcel(event):
     tsmg.showinfo("Warning", "it will read only first 13 column")
     loc = filedialog.askopenfilename()
@@ -1918,6 +1928,7 @@ def importfromexcel(event):
             showstocksbeforesaving(mainlist)
     except Exception as e:
         print(e)
+
 
 def splitbundle1(event):
     global f3
@@ -2013,13 +2024,13 @@ def splitbundle1(event):
 
         pass
 
-
     e.bind("<Return>", check)
     e.bind("<KP_Enter>", check)
 
     Button(f4, text="SEARCH", command=check).grid(row=2, column=0, columnspan=2, padx=25)
 
     pass
+
 
 def splitbundle(event):
     f3.destroy()
@@ -2253,7 +2264,7 @@ def searchbundleno1(event):
 
     l = Label(f4, text="BUNDLE NO", width=8)
     l.grid(row=0, column=0, padx=5, pady=5)
-    e = ttk.Combobox(f4, values=bunlis,height=8)
+    e = ttk.Combobox(f4, values=bunlis, height=8)
     e.grid(row=0, column=1)
     e.focus()
 
@@ -2270,11 +2281,13 @@ def searchbundleno1(event):
 
     def keyup(event):
         e.event_generate("<Down>")
-    e.bind("<KP_Enter>",keyup)
+
+    e.bind("<KP_Enter>", keyup)
     e.bind("<Return>", keyup)
     Button(f4, text="SEARCH", command=check).grid(row=2, column=0, columnspan=2, padx=25)
 
     pass
+
 
 def searchbundleno(event):
     f3.destroy()
@@ -2357,13 +2370,14 @@ def searchpl1(event):
                     treev.insert("", 'end', values=s, tags=(s[12],))
                 treev.tag_configure('SOLD', background='light green')
                 treev.tag_configure('SPLIT', background='light blue')
+
             def desa(d):
                 f3.destroy()
                 desa1(d)
+
             desa(d)
 
             Button(f4, text=" FOUND   ").grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
-
 
     connection = sqlite3.connect("mytables4.db")
     crsr = connection.cursor()
@@ -2380,29 +2394,29 @@ def searchpl1(event):
     # Defining heading
     treev['show'] = 'headings'
 
-        # Assigning the width and anchor to  the
-        # respective columns
+    # Assigning the width and anchor to  the
+    # respective columns
     treev.column("1", anchor='c')
     treev.column("2", anchor='c')
     treev.column("3", anchor='c')
-        # Assigning the heading names to the
+    # Assigning the heading names to the
     # respective columns
     treev.heading("1", text="DATE")
     treev.heading("2", text="PACKING LIST")
     treev.heading("3", text="BUNDLES")
-    dict={}
+    dict = {}
     for s in w:
         if s[10] not in dict:
-            dict[s[10]]=[s[11],s[10],1]
+            dict[s[10]] = [s[11], s[10], 1]
         else:
-            dict[s[10]][2]=dict[s[10]][2]+1
+            dict[s[10]][2] = dict[s[10]][2] + 1
 
     tes = dict.items()
     tes = list(tes)
-    s=[]
+    s = []
     for i in tes:
-        asq=i[1][0].split('-')
-        asq= ''.join(asq)
+        asq = i[1][0].split('-')
+        asq = ''.join(asq)
         i[1].append(asq)
         s.append(i[1])
     reswer = sorted(s, key=lambda x: x[3])
@@ -2410,6 +2424,7 @@ def searchpl1(event):
     for u in reswer:
         u.pop()
         treev.insert("", 'end', values=u)
+
     def clickedrow(event):
         item = treev.identify_row(event.y)
         if item:
@@ -2417,13 +2432,9 @@ def searchpl1(event):
             a = list(a)
             e.insert(0, a[1])
 
-
-
-
         pass
+
     treev.bind("<Double-Button-1>", clickedrow)
-
-
 
     l = Label(f4, text=" PLNO  ", width=10)
     l.grid(row=0, column=0, padx=5, pady=5)
@@ -2433,10 +2444,13 @@ def searchpl1(event):
     e.focus()
 
     pass
+
+
 def searchpl(event):
     f3.destroy()
     f4.destroy()
     searchpl1(event)
+
 
 def searchbundlename1(event):
     global f3
@@ -2500,6 +2514,7 @@ def searchbundlename1(event):
                         d1.append(list(i))
                     d.append(d1)
             connection.close()
+
             # here we get list under alist which is under a list
             def chet1(d):
                 global f3
@@ -2555,13 +2570,14 @@ def searchbundlename1(event):
                         treev.insert("", 'end', values=s, tags=(s[12],))
                 treev.tag_configure('SOLD', background='light green')
                 treev.tag_configure('SPLIT', background='light blue')
+
             def chet(d):
                 f3.destroy()
                 chet1(d)
+
             chet(d)
 
             pass
-
 
         listbox.bind("<Return>", searw1)
         listbox.bind("<KP_Enter>", searw1)
@@ -2575,6 +2591,7 @@ def searchbundlename1(event):
 
         listbox.bind("<Right>", searw2)
         listbox.bind("<Left>", searw2)
+
     listbox.bind("<Button-1>", sear)
 
     e.bind("<KeyRelease>", keydown)
@@ -2585,10 +2602,12 @@ def searchbundlename1(event):
 
     pass
 
+
 def searchbundlename(event):
     f3.destroy()
     f4.destroy()
     searchbundlename1(event)
+
 
 def deletepacking1(event):
     global f3
@@ -2628,6 +2647,7 @@ def deletepacking1(event):
             for i in w:
                 d.append(list(i))
             connection.close()
+
             def resd1(d):
                 global f3
                 f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
@@ -2680,11 +2700,12 @@ def deletepacking1(event):
                     treev.insert("", 'end', values=s, tags=(s[12],))
                 treev.tag_configure('SOLD', background='light green')
                 treev.tag_configure('SPLIT', background='light blue')
+
             def resd(d):
                 f3.destroy()
                 resd1(d)
-            resd(d)
 
+            resd(d)
 
             Button(f4, text="   DELETE    ", command=delete).grid(row=2, column=3, columnspan=2, padx=250, sticky='nw')
 
@@ -2696,10 +2717,12 @@ def deletepacking1(event):
     Button(f4, text="SEARCH", command=check).grid(row=2, column=0, columnspan=2, padx=25)
     pass
 
+
 def deletepacking(event):
     f3.destroy()
     f4.destroy()
     deletepacking1(event)
+
 
 def deletebundle1(event):
     global f3
@@ -2816,14 +2839,17 @@ def deletebundle1(event):
 
     pass
 
+
 def deletebundle(event):
     f3.destroy()
     f4.destroy()
     deletebundle1(event)
 
+
 def updatebundleno(event):
     searchbundleno(event)
     pass
+
 
 def createcustomertable(tablename):
     connection = sqlite3.connect("mytables4.db")
@@ -2841,6 +2867,7 @@ def createcustomertable(tablename):
     connection.commit()
     connection.close()
     pass
+
 
 def addcustomer1(event):
     # sat="custom9"
@@ -2994,10 +3021,12 @@ def addcustomer1(event):
 
     pass
 
+
 def addcustomer(event):
     f3.destroy()
     f4.destroy()
     addcustomer1(event)
+
 
 def updatecustomer1(event):
     global f3
@@ -3018,6 +3047,7 @@ def updatecustomer1(event):
         if item:
             a = treev.item(item, 'values')
             a = list(a)
+
             def sgf1(a):
                 global f4
                 f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
@@ -3110,9 +3140,11 @@ def updatecustomer1(event):
                     d1 = tuple(newdata)
 
                 Button(f4, text="UPDATE CUSTOMER", command=update).grid(row=2, column=4, columnspan=2, padx=25)
+
             def sgf(a):
                 f4.destroy()
                 sgf1(a)
+
             sgf(a)
 
         pass
@@ -3267,6 +3299,7 @@ def updatecustomer1(event):
             Button(f4, text="UPDATE CUSTOMER", command=update).grid(row=2, column=4, columnspan=2, padx=25)
 
         pass
+
     def searchbyname():
         namea = e123.get()
         f4.destroy()
@@ -3328,22 +3361,23 @@ def updatecustomer1(event):
             treev.insert("", 'end', values=s)
 
         pass
+
     def searchbycity():
-        namesa=e234.get()
+        namesa = e234.get()
         f3.destroy()
         f4.destroy()
         searchbycity1(namesa)
-
-
 
     Button(f4, text="SEARCH", command=searchbycity).grid(row=1, column=3, columnspan=2, padx=25)
 
     pass
 
+
 def updatecustomer(event):
     f3.destroy()
     f4.destroy()
     updatecustomer1(event)
+
 
 def showcustomer1(event):
     # we will show customer now
@@ -3404,6 +3438,7 @@ def showcustomer1(event):
         if item:
             a = treev.item(item, 'values')
             a = list(a)
+
             def qwsax1(a):
                 global f3
                 f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
@@ -3438,7 +3473,8 @@ def showcustomer1(event):
 
                 connection = sqlite3.connect("mytables4.db")
                 crsr = connection.cursor()
-                crsr.execute(f"SELECT * FROM billstock5 WHERE BUYER = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}' ")
+                crsr.execute(
+                    f"SELECT * FROM billstock5 WHERE BUYER = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}' ")
                 d = crsr.fetchall()
                 connection.close()
 
@@ -3451,7 +3487,7 @@ def showcustomer1(event):
                         dict[row[0]][3] = float(tot) + float(row[9])
                 tes = dict.items()
                 tes = list(tes)
-                tot_deb=0
+                tot_deb = 0
                 newres = []
                 for i in tes:
                     k = []
@@ -3462,16 +3498,17 @@ def showcustomer1(event):
                     if 'C' in j[0]:
                         pass
                     else:
-                        tot_deb=tot_deb + float(j[1][3])
+                        tot_deb = tot_deb + float(j[1][3])
 
                     newres.append(k)
 
                 connection = sqlite3.connect("mytables4.db")
                 crsr = connection.cursor()
-                crsr.execute(f"SELECT * FROM credittable WHERE NAME = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}'")
+                crsr.execute(
+                    f"SELECT * FROM credittable WHERE NAME = '{a[0]}' AND DATE >= '{from_date}' AND DATE <= '{to_date}'")
                 dome = crsr.fetchall()
                 connection.close()
-                tot_cre=0
+                tot_cre = 0
                 for erw in dome:
                     s = []
                     if (erw[2] == 'CANCEL BILLED'):
@@ -3483,7 +3520,7 @@ def showcustomer1(event):
                     s.append(erw[3])
                     s.append("")
                     newres.append(s)
-                    tot_cre=tot_cre + float(erw[3])
+                    tot_cre = tot_cre + float(erw[3])
                 reswer = []
                 for s in newres:
                     qwq = s[2].split('-')
@@ -3493,24 +3530,20 @@ def showcustomer1(event):
                 reswer.reverse()
                 for s in reswer:
                     s.pop()
-                    asz=s[0]
-                    if s[0]=='CREDIT':
+                    asz = s[0]
+                    if s[0] == 'CREDIT':
                         treev1.insert("", 'end', values=s, tags=(s[0],))
-                    elif asz[0]=="C" and asz != 'CREDIT':
+                    elif asz[0] == "C" and asz != 'CREDIT':
                         treev1.insert("", 'end', values=s, tags=('Car',))
                     else:
                         treev1.insert("", 'end', values=s, tags=('sale',))
-                s12=["","","","",""]
+                s12 = ["", "", "", "", ""]
                 treev1.insert("", 'end', values=s12)
-                s23=["","","TOTAL",tot_cre,tot_deb]
+                s23 = ["", "", "TOTAL", tot_cre, tot_deb]
                 treev1.insert("", 'end', values=s23)
-
-
-
 
                 treev1.tag_configure('CREDIT', background='light green')
                 treev1.tag_configure('Car', background='light blue')
-
 
                 def opencustbill(event):
 
@@ -3519,7 +3552,7 @@ def showcustomer1(event):
                         a = treev1.item(item, 'values')
                         a = list(a)
                         if a[2] != "TOTAL":
-                            if a[2]!='':
+                            if a[2] != '':
                                 def qwaaz1(a):
                                     global f3
                                     global f4
@@ -3625,19 +3658,22 @@ def showcustomer1(event):
                                         e5.insert(0, dawn[4])
 
                                         pass
+
                                 def qwaaz():
                                     f3.destroy()
                                     f4.destroy()
                                     qwaaz1(a)
+
                                 qwaaz()
 
                     pass
 
-
                 treev1.bind("<Double-Button-1>", opencustbill)
+
             def qwsax():
                 f3.destroy()
                 qwsax1(a)
+
             qwsax()
 
 
@@ -3646,14 +3682,14 @@ def showcustomer1(event):
 
         pass
 
-
-
     treev.bind("<Double-Button-1>", clickedrow)
+
 
 def showcustomer(event):
     f3.destroy()
     f4.destroy()
     showcustomer1(event)
+
 
 def createbilltable(tablename):
     connection = sqlite3.connect("mytables4.db")
@@ -3673,6 +3709,7 @@ def createbilltable(tablename):
     connection.commit()
     connection.close()
 
+
 def createbillnotable(tablename):
     connection = sqlite3.connect("mytables4.db")
     cursor = connection.cursor()
@@ -3682,6 +3719,7 @@ def createbillnotable(tablename):
     cursor.execute(sqlcommand)
     connection.commit()
     connection.close()
+
 
 def createcredittable(tablename):
     connection = sqlite3.connect("mytables4.db")
@@ -3695,6 +3733,7 @@ def createcredittable(tablename):
     cursor.execute(sqlcommand)
     connection.commit()
     connection.close()
+
 
 def addpayment1(event):
     global f3
@@ -3823,6 +3862,7 @@ def addpayment1(event):
 
         Button(f4, text="SAVE CREDIT", command=savecredit).grid(row=2, column=2, columnspan=2, padx=25)
         pass
+
     def contin():
         name = drop.get()
         f2.destroy()
@@ -3837,10 +3877,12 @@ def addpayment1(event):
 
     pass
 
+
 def addpayment(event):
     f3.destroy()
     f4.destroy()
     addpayment1(event)
+
 
 def showbill1(event):
     global f3
@@ -3927,6 +3969,7 @@ def showbill1(event):
         if item:
             a = treev.item(item, 'values')
             a = list(a)
+
             def qwertfd(a):
                 global f3
                 f3 = Frame(root, background="bisque", width=100, borderwidth=6, relief=SUNKEN)
@@ -3939,7 +3982,7 @@ def showbill1(event):
                 treev1.configure(xscrollcommand=scrollbar.set)
                 treev1['show'] = 'headings'
 
-                treev1.column("1",width=50, anchor='c')
+                treev1.column("1", width=50, anchor='c')
                 treev1.column("2", width=150, anchor='c')
                 treev1.column("3", width=200, anchor='c')
                 treev1.column("4", width=50, anchor='c')
@@ -3990,22 +4033,24 @@ def showbill1(event):
                 r33 = ("", "", "", "", "TOTAL", "", sum(total))
                 treev1.insert("", 'end', values=r33, tags=('tot',))
                 treev1.tag_configure('tot', background='light blue')
+
             def qsar(a):
                 f3.destroy()
                 qwertfd(a)
-            qsar(a)
 
+            qsar(a)
 
         pass
 
-
     treev.bind("<Double-Button-1>", clickedrow)
     pass
+
 
 def showbill(event):
     f3.destroy()
     f4.destroy()
     showbill1(event)
+
 
 def showpayments1(events):
     global f3
@@ -4049,10 +4094,12 @@ def showpayments1(events):
 
     pass
 
+
 def showpayments(events):
     f3.destroy()
     f4.destroy()
     showpayments1(events)
+
 
 def billallexcel(event):
     connection = sqlite3.connect("mytables4.db")
@@ -4083,6 +4130,7 @@ def billallexcel(event):
     worksheet.set_column(10, 12, 15)
     workbook.close()
     tsmg.showinfo("converted", "created a file name BILLLIST")
+
 
 def exportbill1(event):
     global f3
@@ -4271,10 +4319,10 @@ def exportbill1(event):
             worksheet.write(num + 4, 6, "", cell_right)
             worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
 
-
-            worksheet.write(num + 2, 2, f"                               ",cell_leftrighttop)
-            worksheet.write(num + 3, 2, f"    ",cell_leftright)
-            worksheet.write(num + 4, 2, f"     BALANCE                                 {float(sel[7])}",cell_leftrighttop)
+            worksheet.write(num + 2, 2, f"                               ", cell_leftrighttop)
+            worksheet.write(num + 3, 2, f"    ", cell_leftright)
+            worksheet.write(num + 4, 2, f"     BALANCE                                 {float(sel[7])}",
+                            cell_leftrighttop)
 
             workbook.close()
             tsmg.showinfo("CREATED", "File has been created")
@@ -4288,10 +4336,12 @@ def exportbill1(event):
 
     pass
 
+
 def exportbill(event):
     f3.destroy()
     f4.destroy()
     exportbill1(event)
+
 
 def updatebill1(event):
     global f3
@@ -4347,10 +4397,10 @@ def updatebill1(event):
             sel = list(sel[0])
             billnoforadd = d[0][0]
             buyernameforadd = sel[0]
-            dateforadd=d[0][7]
+            dateforadd = d[0][7]
             r1 = ("NAME", sel[0], "", "BILLNO", d[0][0], "", "")
             r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
-            r3 = ("ADD2", sel[2]+","+sel[3], "", "DATE", d[0][7], "", "")
+            r3 = ("ADD2", sel[2] + "," + sel[3], "", "DATE", d[0][7], "", "")
             treev1.insert("", 'end', values=r1)
             treev1.insert("", 'end', values=r2)
             treev1.insert("", 'end', values=r3)
@@ -4381,7 +4431,7 @@ def updatebill1(event):
             r33 = ("", "", "", "", "TOTAL", "", sum(total))
             treev1.insert("", 'end', values=r33, tags=('tot',))
             treev1.tag_configure('tot', background='light blue')
-            lengthofde=len(de)
+            lengthofde = len(de)
 
             def changedate1():
                 global f4
@@ -4412,21 +4462,25 @@ def updatebill1(event):
                     else:
                         tsmg.showinfo("FORMAT", "Wrong date format")
                         # UPDATE DATE
+
                 Button(f4, text="CHANGE DATE", command=face).grid(row=1, column=0, columnspan=2)
 
                 pass
+
             def changedate():
                 f4.destroy()
                 changedate1()
-            m = Menu(root, tearoff = 0)
+
             m = Menu(root, tearoff=0)
-            yaxis=0
+            m = Menu(root, tearoff=0)
+            yaxis = 0
+
             def delete():
                 item = treev1.identify_row(yaxis)
 
                 if lengthofde != 1:
-                    a= treev1.item(item,'values')
-                    a=list(a)
+                    a = treev1.item(item, 'values')
+                    a = list(a)
                     connection = sqlite3.connect("mytables4.db")
                     cursor = connection.cursor()
                     sa = f'''DELETE FROM billstock5 WHERE BUNDLENO = '{a[0]}' AND PRODUCT ='{a[1]}' AND SIZE = '{a[2]}' AND PCS = '{a[3]}' AND KG = '{a[4]}';'''
@@ -4441,14 +4495,15 @@ def updatebill1(event):
                     sele = conn.fetchall()
                     selecate = list(sele[0])
                     totale121 = float(selecate[7])
-                    totka121=int(a[6])
+                    totka121 = int(a[6])
                     new_tot121 = totale121 - float(totka121)
                     conn.execute(f"UPDATE custom9 SET TOTAL = '{new_tot121}' where NAME='{na}'")
                     connection.commit()
                     connection.close()
                     treev1.delete(item)
                 else:
-                    tsmg.showinfo("WARNING","U can't delete it but cancel it")
+                    tsmg.showinfo("WARNING", "U can't delete it but cancel it")
+
             def update():
                 item = treev1.identify_row(yaxis)
                 if item:
@@ -4468,11 +4523,12 @@ def updatebill1(event):
                     l2.grid(row=1, column=0, padx=5, pady=5)
                     e2 = Entry(t1)
                     e2.grid(row=1, column=1)
-                    e1.insert(0,'0')
-                    e2.insert(0,'0')
+                    e1.insert(0, '0')
+                    e2.insert(0, '0')
+
                     def setrate():
                         try:
-                            qwaszx=int(e1.get())
+                            qwaszx = int(e1.get())
                             qwaszx2 = int(e2.get())
                             sa = f'''UPDATE billstock5 SET RATE = '{e1.get()}',TOTAL = '{e2.get()}' WHERE BUNDLENO = '{a[0]}' AND PRODUCT ='{a[1]}' AND SIZE = '{a[2]}' AND PCS = '{a[3]}' AND KG = '{a[4]}';'''
                             cursor.execute(sa)
@@ -4492,33 +4548,28 @@ def updatebill1(event):
                             a[6] = e2.get()
                             t1.destroy()
                             nonlocal treev1
-                            g=(a[0], a[1], a[2], a[3], a[4], a[5], a[6])
-                            treev1.item(item,values=g)
+                            g = (a[0], a[1], a[2], a[3], a[4], a[5], a[6])
+                            treev1.item(item, values=g)
 
 
                         except Exception as e:
-                            tsmg.showinfo("warn","something went wrong")
-
-
+                            tsmg.showinfo("warn", "something went wrong")
 
                         pass
+
                     b11 = Button(t1, text="    SET    ", command=setrate)
                     b11.grid(row=2, column=0, columnspan=2, pady=20)
 
-
-
-
                 print("update")
 
-
-            m.add_command(label="Delete",command=delete)
+            m.add_command(label="Delete", command=delete)
             m.add_separator()
-            m.add_command(label="Update",command=update)
+            m.add_command(label="Update", command=update)
+
             def do_popup(event):
                 nonlocal yaxis
                 yaxis = event.y
-                m.tk_popup(event.x_root,event.y_root)
-
+                m.tk_popup(event.x_root, event.y_root)
 
             treev1.bind("<Button-2>", do_popup)
 
@@ -4571,7 +4622,7 @@ def updatebill1(event):
             Button(f4, text="CANCEL BILL", command=cancelbill).grid(row=1, column=3, columnspan=2, padx=150)
 
             def addbundlea():
-                t1= Toplevel()
+                t1 = Toplevel()
                 t1.minsize(450, 450)
                 f3 = Frame(t1, background="bisque", borderwidth=6, relief=SUNKEN)
                 f3.grid(row=0, column=2, sticky="nsew")
@@ -4591,6 +4642,7 @@ def updatebill1(event):
                 e = ttk.Combobox(f4, values=bunlis, height=8)
                 e.grid(row=0, column=1)
                 e.focus()
+
                 def check():
                     connection = sqlite3.connect("mytables4.db")
                     crsr = connection.cursor()
@@ -4602,8 +4654,8 @@ def updatebill1(event):
                     else:
                         d = list(w[0])
                         connection.close()
-                        if(d[12] == 'SOLD'):
-                            tsmg.showinfo("warning","Bundle already SOLD!")
+                        if (d[12] == 'SOLD'):
+                            tsmg.showinfo("warning", "Bundle already SOLD!")
                         else:
                             l1 = Label(f3, text="Bundle type", width=8)
                             l1.grid(row=0, column=0, padx=5, pady=5)
@@ -4669,8 +4721,9 @@ def updatebill1(event):
                             e9.insert(0, d[8])
                             e10.insert(0, d[9])
                             e11.insert(0, d[10])
+
                             def addbillto():
-                                r4=[]
+                                r4 = []
                                 r4.append(billnoforadd)
                                 r4.append(buyernameforadd)
                                 r4.append(d[3])
@@ -4707,7 +4760,7 @@ def updatebill1(event):
                                 conn = connection.cursor()
                                 conn.execute(f"UPDATE stockfinal634 SET STATUS = 'SOLD' where BUNDLE='{d[3]}'")
                                 connection.commit()
-                                i=r4
+                                i = r4
                                 sa = f'''INSERT INTO billstock5 VALUES ('{i[0]}','{i[1]}','{i[2]}','{i[3]}','{i[4]}','{i[5]}','{i[6]}','{i[7]}','{i[8]}','{i[9]}')'''
                                 conn.execute(sa)
                                 connection.commit()
@@ -4715,7 +4768,7 @@ def updatebill1(event):
                                 sele = conn.fetchall()
                                 selecate = list(sele[0])
                                 tot = float(selecate[7])
-                                new_tot=tot + int(i[9])
+                                new_tot = tot + int(i[9])
                                 connection.close()
 
                                 connection = sqlite3.connect("mytables4.db")
@@ -4729,17 +4782,12 @@ def updatebill1(event):
                                 r4.pop(0)
                                 r4.pop(5)
 
-                                treev1.insert('','end' , values=tuple(r4) )
+                                treev1.insert('', 'end', values=tuple(r4))
 
                                 t1.destroy()
 
-
-
-
-
-
                             Button(f4, text=" ADD TO BILl ", command=addbillto).grid(row=2, column=3, columnspan=2,
-                                                                           padx=250,sticky='nw')
+                                                                                     padx=250, sticky='nw')
 
                 def keydown(event):
                     ba = e.get()
@@ -4763,8 +4811,9 @@ def updatebill1(event):
 
         else:
             tsmg.showinfo("Sorry", "Can't update cancelled bill ! ")
+
     def upbill():
-        e1get=e1.get()
+        e1get = e1.get()
         f3.destroy()
         f4.destroy()
         upbill1(e1get)
@@ -4773,10 +4822,12 @@ def updatebill1(event):
 
     pass
 
+
 def updatebill(event):
     f3.destroy()
     f4.destroy()
     updatebill1(event)
+
 
 def createbill1(event):
     global f2
@@ -4803,7 +4854,7 @@ def createbill1(event):
     for i in d:
         namelist.append(i[0])
     namelist = sorted(namelist)
-    drop = ttk.Combobox(f4, values=namelist,width=20)
+    drop = ttk.Combobox(f4, values=namelist, width=20)
     drop.pack()
 
     def keydown(e):
@@ -4865,8 +4916,14 @@ def createbill1(event):
 
         # we will fatch bundle no now
         datefor = date.today()
+        month = datefor.strftime("%m")
+        month = int(month)
         year = datefor.strftime("%Y")
-
+        year = int(year)
+        if (month < 4):
+            year = year - 1
+            year = str(year)
+        print(year)
         connection = sqlite3.connect("mytables4.db")
         crsr = connection.cursor()
         crsr.execute(f"SELECT * FROM billno9 WHERE NAME = '{year}'")
@@ -4877,7 +4934,7 @@ def createbill1(event):
         # remember to upgrade bill no
         r1 = ("NAME", sel[0], "", "BILLNO", billno, "", "")
         r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
-        r3 = ("ADD2", sel[2]+','+sel[3] , "", "", "", "", "")
+        r3 = ("ADD2", sel[2] + ',' + sel[3], "", "", "", "", "")
         treev.insert("", 'end', values=r1)
         treev.insert("", 'end', values=r2)
         treev.insert("", 'end', values=r3)
@@ -4892,7 +4949,7 @@ def createbill1(event):
         connection.close()
         bunlis = []
         for i in w:
-            if(i[12]!='SOLD'):
+            if (i[12] != 'SOLD'):
                 bunlis.append(i[3])
         bunlis.reverse()
 
@@ -4920,7 +4977,7 @@ def createbill1(event):
 
         def check():
 
-            if ese.get()=="NEW BUNDLE":
+            if ese.get() == "NEW BUNDLE":
                 f4 = Frame(root, background="pink", width=80, borderwidth=6, relief=SUNKEN)
                 f4.grid(row=1, column=2, sticky="nsew")
                 connection = sqlite3.connect("mytables4.db")
@@ -4932,7 +4989,6 @@ def createbill1(event):
                 for i in waq:
                     bunlistype.append(i[0])
                 bunlistype = list(set(bunlistype))
-
 
                 l1 = Label(f4, text="Bundle type", width=8)
                 l1.grid(row=0, column=0, padx=5, pady=5)
@@ -4985,7 +5041,7 @@ def createbill1(event):
                 l13 = Label(f4, text="STATUS", padx=5, width=8)
                 l13.grid(row=1, column=5, padx=20, pady=5)
                 e13 = Entry(f4)
-                e13.insert(0,'INSTOCK')
+                e13.insert(0, 'INSTOCK')
                 e13.grid(row=1, column=6, padx=5, pady=5)
                 l14 = Label(f4, text="TOTAL", padx=5, width=8)
                 l14.grid(row=3, column=5, padx=5, pady=5)
@@ -5008,11 +5064,12 @@ def createbill1(event):
 
                 e1.bind("<KP_Enter>", keyup)
                 e1.bind("<Return>", keyup)
+
                 def checkasw():
                     today = date.today()
                     datetodayqs = today.strftime("%Y-%m-%d")
                     try:
-                        d1a=[]
+                        d1a = []
                         d1a.append(e1.get())
                         d1a.append(e2.get())
                         d1a.append(e3.get())
@@ -5026,15 +5083,16 @@ def createbill1(event):
                         d1a.append(e11.get())
                         d1a.append(datetodayqs)
                         d1a.append(e13.get())
-                        d1a2=tuple(d1a)
+                        d1a2 = tuple(d1a)
                         connection = sqlite3.connect("mytables4.db")
                         cursor = connection.cursor()
                         row = d1a2
                         sa = f'''INSERT INTO stockfinal634 VALUES ('{row[0]}','{row[1]}','{row[2]}','{row[3]}','{row[4]}','{row[5]}','{row[6]}','{row[7]}','{row[8]}','{row[9]}','{row[10]}','{row[11]}','{row[12]}')'''
                         cursor.execute(sa)
                         connection.commit()
+
                         def addtobill(*args):
-                            d=d1a
+                            d = d1a
                             nonlocal poplino
                             nonlocal bunlis
                             poplino = 1
@@ -5077,6 +5135,7 @@ def createbill1(event):
                             else:
                                 pass
                             f4.destroy()
+
                         addtobill()
 
                         def savebill(event):
@@ -5317,7 +5376,8 @@ def createbill1(event):
                                 worksheet.write(num + 3, 6, "", cell_righttop)
                                 worksheet.write(num + 4, 6, "", cell_right)
                                 worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                                worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",
+                                worksheet.write(num + 2, 2,
+                                                f"     BALANCE                                   {selec[7]}",
                                                 cell_leftrighttop)
                                 worksheet.write(num + 3, 2,
                                                 f"     NEW                                             + {str(sum(total))}",
@@ -5332,7 +5392,8 @@ def createbill1(event):
                                 selecate = list(sele[0])
                                 totalW = float(selecate[7])
                                 newtotal = totalW + totka
-                                worksheet.write(num + 4, 2, f"     NEW BALC.                                 {newtotal}",
+                                worksheet.write(num + 4, 2,
+                                                f"     NEW BALC.                                 {newtotal}",
                                                 cell_leftrighttop)
 
                                 conn.execute(f"UPDATE custom9 SET TOTAL = '{newtotal}' where NAME='{na}'")
@@ -5345,6 +5406,7 @@ def createbill1(event):
 
                                 createbill(event)
                                 pass
+
                         b4 = Button(f2, text="SAVE BILL")
                         b4.pack(pady=150)
                         b4.bind('<Button-1>', savebill)
@@ -5366,7 +5428,7 @@ def createbill1(event):
                         Checkbutton(f4, text="BY KG", variable=var1, command=mixcheck).grid(row=4, column=5, padx=25)
 
                     except Exception as e:
-                        tsmg.showinfo("info","bundle already exists")
+                        tsmg.showinfo("info", "bundle already exists")
                         print(e)
                     pass
 
@@ -5471,7 +5533,7 @@ def createbill1(event):
                             r4 = []
                             r4.append(d[3])
                             r4.append(d[0])
-                            r4.append(d[1]+d[2] + 'x'+d[8]+'mm')
+                            r4.append(d[1] + d[2] + 'x' + d[8] + 'mm')
                             r4.append(d[7])
                             r4.append(d[9])
                             if e12.get() == '':
@@ -5570,7 +5632,6 @@ def createbill1(event):
                                 worksheet.set_column('A:A', 10)
                                 worksheet.set_column('B:B', 30)
                                 worksheet.set_column('C:C', 40)
-
 
                                 cell_format = workbook.add_format()
                                 cell_format.set_bottom(2)
@@ -5750,8 +5811,12 @@ def createbill1(event):
                                 worksheet.write(num + 3, 6, "", cell_righttop)
                                 worksheet.write(num + 4, 6, "", cell_right)
                                 worksheet.write(num + 5, 5, "   SIGNATURE", cell_bottom1)
-                                worksheet.write(num + 2, 2, f"     BALANCE                                   {selec[7]}",cell_leftrighttop)
-                                worksheet.write(num + 3, 2,f"     NEW                                             + {str(sum(total))}",cell_leftright)
+                                worksheet.write(num + 2, 2,
+                                                f"     BALANCE                                   {selec[7]}",
+                                                cell_leftrighttop)
+                                worksheet.write(num + 3, 2,
+                                                f"     NEW                                             + {str(sum(total))}",
+                                                cell_leftright)
 
                                 totka = sum(total)
 
@@ -5762,7 +5827,9 @@ def createbill1(event):
                                 selecate = list(sele[0])
                                 totalW = float(selecate[7])
                                 newtotal = totalW + totka
-                                worksheet.write(num + 4, 2,f"     NEW BALC.                                 {newtotal}",cell_leftrighttop)
+                                worksheet.write(num + 4, 2,
+                                                f"     NEW BALC.                                 {newtotal}",
+                                                cell_leftrighttop)
 
                                 conn.execute(f"UPDATE custom9 SET TOTAL = '{newtotal}' where NAME='{na}'")
                                 workbook.close()
@@ -5918,7 +5985,7 @@ def createbill1(event):
         Button(f2, text="SEARCH", command=check).pack(pady=10)
 
     def contin(eve):
-        na=drop.get()
+        na = drop.get()
         f2.destroy()
         f3.destroy()
         f4.destroy()
@@ -5929,17 +5996,19 @@ def createbill1(event):
     drop.bind("<KeyRelease>", keydown)
     drop.bind("<Return>", keyup)
     drop.focus()
-    b1k=Button(f4, text="UPDATE CUSTOMER")
+    b1k = Button(f4, text="UPDATE CUSTOMER")
     b1k.pack(pady=30)
-    b1k.bind('<Button-1>',contin)
+    b1k.bind('<Button-1>', contin)
 
     pass
+
 
 def createbill(event):
     f3.destroy()
     f4.destroy()
     f2.destroy()
     createbill1(event)
+
 
 def f2f4destroy1(event):
     t = event.widget.cget("text")
@@ -6038,9 +6107,11 @@ def f2f4destroy1(event):
     else:
         pass
 
+
 def f2f4destroy(event):
     f2.destroy()
     f2f4destroy1(event)
+
 
 try:
     tablename = "stockfinal634"
@@ -6222,8 +6293,9 @@ except Exception as e:
 
     b1.focus()
 
+
 def changedate(event):
-    t1=Toplevel(background="bisque")
+    t1 = Toplevel(background="bisque")
     t1.title("DATE")
     t1.minsize(250, 150)
 
@@ -6238,46 +6310,48 @@ def changedate(event):
     e2.grid(row=1, column=1)
     e1.bind("<KP_Enter>", lambda x: e2.focus())
     e1.bind("<Return>", lambda x: e2.focus())
+
     def setdate(*eve):
         global from_date
         global to_date
         getfrom = e1.get()
         getto = e2.get()
-        if getfrom.count('-')==2 and getfrom.index('-')==2 and getfrom.index('-',3) == 5 and len(getfrom)==10:
-            date1=getfrom.split('-')
+        if getfrom.count('-') == 2 and getfrom.index('-') == 2 and getfrom.index('-', 3) == 5 and len(getfrom) == 10:
+            date1 = getfrom.split('-')
             date1.reverse()
-            date2="-".join(date1)
-            from_date=date2
-        elif getfrom.count('-')==2 and getfrom.index('-')==4 and getfrom.index('-',5) == 7 and len(getfrom)==10:
-            date2=getfrom
-            from_date=date2
+            date2 = "-".join(date1)
+            from_date = date2
+        elif getfrom.count('-') == 2 and getfrom.index('-') == 4 and getfrom.index('-', 5) == 7 and len(getfrom) == 10:
+            date2 = getfrom
+            from_date = date2
         else:
-            tsmg.showinfo("FORMAT","Wrong date format")
-        
-        if getto.count('-')==2 and getto.index('-')==2 and getto.index('-',3) == 5 and len(getto)==10:
-            date12=getto.split('-')
+            tsmg.showinfo("FORMAT", "Wrong date format")
+
+        if getto.count('-') == 2 and getto.index('-') == 2 and getto.index('-', 3) == 5 and len(getto) == 10:
+            date12 = getto.split('-')
             date12.reverse()
-            date21="-".join(date12)
-            to_date=date21
-        elif getto.count('-')==2 and getto.index('-')==4 and getto.index('-',5) == 7 and len(getto)==10:
-            date21=getto
-            to_date=date21
+            date21 = "-".join(date12)
+            to_date = date21
+        elif getto.count('-') == 2 and getto.index('-') == 4 and getto.index('-', 5) == 7 and len(getto) == 10:
+            date21 = getto
+            to_date = date21
         else:
-            tsmg.showinfo("FORMAT","Wrong date format")
+            tsmg.showinfo("FORMAT", "Wrong date format")
         try:
             root.title(f"stock {from_date} TO {to_date}")
         except Exception as e:
             print(e)
         t1.destroy()
 
-
-    b1=Button(t1,text="    SET    ",command=setdate)
-    b1.grid(row=2,column=0,columnspan=2,pady=20)
+    b1 = Button(t1, text="    SET    ", command=setdate)
+    b1.grid(row=2, column=0, columnspan=2, pady=20)
     e2.bind("<KP_Enter>", lambda x: b1.focus())
     e2.bind("<Return>", lambda x: b1.focus())
-    b1.bind("<KP_Enter>",setdate)
+    b1.bind("<KP_Enter>", setdate)
 
     pass
+
+
 def changepldate(eve):
     t1 = Toplevel(background="bisque")
     t1.title("DATE")
@@ -6321,8 +6395,9 @@ def changepldate(eve):
 
     pass
 
-root.bind("<F3>",changepldate)
-root.bind("<F4>",showmax)
-root.bind("<F2>",changedate)
+
+root.bind("<F3>", changepldate)
+root.bind("<F4>", showmax)
+root.bind("<F2>", changedate)
 root.mainloop()
 
