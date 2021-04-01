@@ -45,6 +45,16 @@ root.grid_columnconfigure(1)
 root.grid_columnconfigure(2, weight=10)
 root.grid_rowconfigure(0, weight=3)
 root.grid_rowconfigure(1, weight=1)
+datefor = date.today()
+month = datefor.strftime("%m")
+month = int(month)
+year = datefor.strftime("%Y")
+year = int(year)
+if (month < 4):
+    year = year - 1
+    year = str(year)
+year = str(year)
+print(year)
 
 
 def createtable(tablename):
@@ -1435,12 +1445,15 @@ def addpacking(event):
             l1 = []
             l2 = []
             for i in range(len(w)):
+                print(w[i])
                 if (i % 2 == 0):
                     l1.append(w[i])
                 else:
                     l2.append(w[i])
             l3 = []
-            for i in range(len(l1)):
+            #modified
+            # earlier it was only len(l1) now we are using min of l1 ans l2
+            for i in range(min(len(l1),len(l2))):
                 l4 = l1[i] + l2[i]
                 l3.append(l4)
             d = l3
@@ -1848,7 +1861,7 @@ def addpacking(event):
                 else:
                     l2.append(w[i])
             l3 = []
-            for i in range(len(l1)):
+            for i in range(min(len(l1),len(l2))):
                 l4 = l1[i] + l2[i]
                 l3.append(l4)
             d = l3
@@ -3958,7 +3971,7 @@ def showbill1(event):
         newres.append(k)
 
     for s in newres:
-        if '-' in s[0]:
+        if 'C-' in s[0]:
             treev.insert("", 'end', values=s, tags=('cancelbill',))
         else:
             treev.insert("", 'end', values=s)
@@ -4367,7 +4380,7 @@ def updatebill1(event):
         crsr = connection.cursor()
         qwwq = e1get
         qwerewq = qwwq.split('-')
-        if (len(qwerewq) == 1):
+        if (len(qwerewq) == 2):
             crsr.execute(f"SELECT * FROM billstock5 WHERE BILLNO= '{e1get}'")
             d = crsr.fetchall()
             connection.close()
@@ -4915,22 +4928,16 @@ def createbill1(event):
             return
 
         # we will fatch bundle no now
-        datefor = date.today()
-        month = datefor.strftime("%m")
-        month = int(month)
-        year = datefor.strftime("%Y")
-        year = int(year)
-        if (month < 4):
-            year = year - 1
-            year = str(year)
-        print(year)
+
         connection = sqlite3.connect("mytables4.db")
         crsr = connection.cursor()
         crsr.execute(f"SELECT * FROM billno9 WHERE NAME = '{year}'")
         w = crsr.fetchall()
         connection.close()
         wai = list(w[0])
-        billno = wai[1]
+        yearlasttwo = year[2:]
+        billno = str(yearlasttwo) + '-' +str(wai[1])
+
         # remember to upgrade bill no
         r1 = ("NAME", sel[0], "", "BILLNO", billno, "", "")
         r2 = ("ADD1", sel[1], "", "MOBILENO", sel[5], "", "")
