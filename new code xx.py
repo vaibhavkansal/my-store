@@ -139,9 +139,15 @@ def addbundle1(event):
     w = crsr.fetchall()
     connection.close()
     bunlis = []
+    densiz = []
+    remark = []
     for i in w:
         bunlis.append(i[0])
+        densiz.append(i[1])
+        remark.append(i[2])
     bunlis = list(set(bunlis))
+    densiz = list(set(densiz))
+    remark = list(set(remark))
 
     def check(*args):
         d.append(e1.get())
@@ -199,11 +205,11 @@ def addbundle1(event):
     e1.grid(row=0, column=1)
     l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
     l2.grid(row=1, column=0, padx=5, pady=5)
-    e2 = Entry(f4)
+    e2 = ttk.Combobox(f4, values=densiz, height=8, width=31)
     e2.grid(row=1, column=1)
     l3 = Label(f4, text="THK REMARK", padx=5, width=8)
     l3.grid(row=2, column=0, padx=5, pady=5)
-    e3 = Entry(f4)
+    e3 = ttk.Combobox(f4, values=remark, height=8, width=31)
     e3.grid(row=2, column=1)
     l4 = Label(f4, text="BUNDLE", padx=5, width=8)
     l4.grid(row=3, column=0, padx=5, pady=5)
@@ -286,8 +292,46 @@ def addbundle1(event):
     def keyup(event):
         e1.event_generate("<Down>")
 
+
+
+
     e1.bind("<KP_Enter>", keyup)
     e1.bind("<Return>", keyup)
+
+
+    def keyup2(event):
+        e2.event_generate("<Down>")
+
+    e2.bind("<KP_Enter>", keyup2)
+    e2.bind("<Return>", keyup2)
+    def keydown2(event):
+        ba = e2.get()
+        a = ba.upper()
+        checklist = []
+        for i in densiz:
+            if a in i:
+                checklist.append(i)
+        e2["values"] = checklist
+
+    e2.bind("<KeyRelease>", keydown2)
+
+    def keyup3(event):
+        e3.event_generate("<Down>")
+
+    e3.bind("<KP_Enter>", keyup3)
+    e3.bind("<Return>", keyup3)
+    def keydown3(event):
+        ba = e3.get()
+        a = ba.upper()
+        checklist = []
+        for i in remark:
+            if a in i:
+                checklist.append(i)
+        e3["values"] = checklist
+    e3.bind("<KeyRelease>", keydown3)
+
+
+
 
     e12.bind("<KP_Enter>", check)
     e12.bind("<Return>", check)
@@ -826,9 +870,17 @@ def addpackingmanual1():
     w = crsr.fetchall()
     connection.close()
     bunlis = []
+    densiz=[]
+    remark=[]
     for i in w:
         bunlis.append(i[0])
+        densiz.append(i[1])
+        remark.append(i[2])
     bunlis = list(set(bunlis))
+    densiz = list(set(densiz))
+    remark = list(set(remark))
+
+
 
     def check(*args):
         d = []
@@ -884,11 +936,11 @@ def addpackingmanual1():
     e1.grid(row=0, column=1)
     l2 = Label(f4, text="DEN SIZE", padx=5, width=8)
     l2.grid(row=1, column=0, padx=5, pady=5)
-    e2 = Entry(f4)
+    e2 = ttk.Combobox(f4, values=densiz, height=8, width=31)
     e2.grid(row=1, column=1)
     l3 = Label(f4, text="THK REMARK", padx=5, width=8)
     l3.grid(row=2, column=0, padx=5, pady=5)
-    e3 = Entry(f4)
+    e3 = ttk.Combobox(f4, values=remark, height=8, width=31)
     e3.grid(row=2, column=1)
     l4 = Label(f4, text="BUNDLE", padx=5, width=8)
     l4.grid(row=3, column=0, padx=5, pady=5)
@@ -976,6 +1028,38 @@ def addpackingmanual1():
 
     e1.bind("<KP_Enter>", keyup)
     e1.bind("<Return>", keyup)
+
+    def keyup2(event):
+        e2.event_generate("<Down>")
+
+    e2.bind("<KP_Enter>", keyup2)
+    e2.bind("<Return>", keyup2)
+    def keydown2(event):
+        ba = e2.get()
+        a = ba.upper()
+        checklist = []
+        for i in densiz:
+            if a in i:
+                checklist.append(i)
+        e2["values"] = checklist
+
+    e2.bind("<KeyRelease>", keydown2)
+
+    def keyup3(event):
+        e3.event_generate("<Down>")
+
+    e3.bind("<KP_Enter>", keyup3)
+    e3.bind("<Return>", keyup3)
+    def keydown3(event):
+        ba = e3.get()
+        a = ba.upper()
+        checklist = []
+        for i in remark:
+            if a in i:
+                checklist.append(i)
+        e3["values"] = checklist
+    e3.bind("<KeyRelease>", keydown3)
+
 
     e12.bind("<KP_Enter>", check)
     e12.bind("<Return>", check)
