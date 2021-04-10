@@ -153,6 +153,7 @@ def addbundle1(event):
         d.append(e1.get())
         d.append(e2.get())
         d.append(e3.get())
+        d.append(e3.get())
         d.append(e4.get())
         d.append(e5.get())
         d.append(e6.get())
@@ -1387,7 +1388,17 @@ def addpacking(event):
                     i[7] = i[8]
                     i[8] = ''
                 i.append(status)
+            wed = d.copy()
+            d=[]
+            for j in wed:
+                k= j[3]
+                if k.count('-')==1:
+                    d.append(j)
+                else:
+                    break
             showstocksbeforesaving(d)
+
+
         else:
             pob = pr.getPage(0)
             f = pob.extractText()
@@ -1794,6 +1805,14 @@ def addpacking(event):
                     i[7] = i[8]
                     i[8] = ''
                 dfortwopages.append(i)
+            wed = dfortwopages.copy()
+            dfortwopages= []
+            for j in wed:
+                k = j[3]
+                if k.count('-') == 1:
+                    dfortwopages.append(j)
+                else:
+                    break
             showstocksbeforesaving(dfortwopages)
     except Exception as e:
         if (asqwa == True):
@@ -2000,6 +2019,14 @@ def addpacking(event):
                     i[7] = i[8]
                     i[8] = ''
                 i.append(status)
+            wed = d.copy()
+            d = []
+            for j in wed:
+                k = j[3]
+                if k.count('-') == 1:
+                    d.append(j)
+                else:
+                    break
             showstocksbeforesaving(d)
 
     pass
@@ -2349,12 +2376,27 @@ def searchbundleno1(event):
                 treev1.insert("", 'end', values=r33, tags=('tot',))
                 treev1.tag_configure('tot', background='light blue')
 
+            def delete():
+                chos = tsmg.askquestion("Warning", f"bundle no {e.get()} will be deleted from the stock\n Are you sure" )
+                if chos=="yes":
+                    connection = sqlite3.connect("mytables4.db")
+                    crsr = connection.cursor()
+                    crsr.execute(f"DELETE FROM stockfinal634 WHERE BUNDLE ='{e.get()}';")
+                    connection.commit()
+                    connection.close()
+                    tsmg.showinfo("Deleted",f"bundle no {e.get()} deleted from stock")
+
+
+            Button(f4, text=" DELETE", command=delete).grid(row=2, column=2, padx=20,sticky='nw')
+
+
+
             if (d[12] == "SOLD"):
-                Button(f4, text=" SHOW BILL ", command=showbill).grid(row=2, column=3, columnspan=2, padx=250,
+                Button(f4, text=" SHOW BILL ", command=showbill).grid(row=2, column=3, columnspan=2, padx=20,
                                                                       sticky='nw')
 
             else:
-                Button(f4, text="    UPDATE    ", command=update).grid(row=2, column=3, columnspan=2, padx=250,
+                Button(f4, text="    UPDATE    ", command=update).grid(row=2, column=3, columnspan=2, padx=20,
                                                                        sticky='nw')
 
         pass
