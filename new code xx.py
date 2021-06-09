@@ -169,7 +169,6 @@ def addbundle1(event):
         d.append(e1.get())
         d.append(e2.get())
         d.append(e3.get())
-        d.append(e3.get())
         d.append(e4.get())
         d.append(e5.get())
         d.append(e6.get())
